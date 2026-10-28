@@ -1,0 +1,7 @@
+/**
+ * Utility functions for class names and formatting.
+ */
+
+export function cn(...inputs: Array<string | undefined | null | false>): string {
+  return inputs.filter(Boolean).join(" ");
+}
