@@ -132,15 +132,15 @@ export const Contact: React.FC = () => {
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <SectionHeading
-            badge="Get In Touch"
-            title="Direct Contact &amp; Opportunities"
-            description="Open for junior web developer roles, frontend engineering internships, and select freelance client projects. Reach out directly through any of the verified channels below."
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* Left Column: Direct Communication Channels (5 cols) */}
-            <div className="lg:col-span-5 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative">
+            {/* Left Column: Direct Communication Channels & Sticky Dossier (5 cols) */}
+            <div className="lg:col-span-5 sticky-scene-panel space-y-6">
+              <SectionHeading
+                chapter="06 // ENGAGEMENT"
+                badge="Get In Touch"
+                title="Direct Contact &amp; Opportunities"
+                description="Open for junior web developer roles, frontend engineering internships, and select freelance client projects. Reach out directly through any of the verified channels below."
+              />
               {/* Status & Availability Card */}
               <Card surface="elevated" className="space-y-4">
                 <div className="flex items-center gap-2">

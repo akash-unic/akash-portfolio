@@ -96,19 +96,23 @@ export const Hero: React.FC = () => {
               </h2>
             </div>
 
-            {/* Headline with Word-Level Reveal Flow */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#f8fafc] leading-[1.12] mt-2 animate-fade-in-up [animation-delay:120ms]">
-              <span className="inline-block">I build</span>{" "}
-              <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-100 to-blue-400 font-black">
-                modern digital
-              </span>{" "}
-              <span className="inline-block">experiences.</span>
-            </h1>
+            {/* Headline with Masked Typography Reveal */}
+            <div className="text-mask-reveal mt-2">
+              <h1 className="masked-line text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#f8fafc] leading-[1.12]">
+                <span className="inline-block">I build</span>{" "}
+                <span className="inline-block shimmer-headline font-black">
+                  modern digital
+                </span>{" "}
+                <span className="inline-block">experiences.</span>
+              </h1>
+            </div>
 
-            {/* Supporting Copy */}
-            <p className="mt-6 text-base sm:text-lg lg:text-xl text-[#94a3b8] leading-relaxed max-w-2xl font-normal animate-fade-in-up [animation-delay:180ms]">
-              I&apos;m <strong className="font-semibold text-[#f8fafc]">{profile.name}</strong>, a web developer exploring modern frontend technologies and building responsive web experiences through real-world projects.
-            </p>
+            {/* Supporting Copy with Masked Line Reveal */}
+            <div className="text-mask-reveal mt-6">
+              <p className="masked-line text-base sm:text-lg lg:text-xl text-[#94a3b8] leading-relaxed max-w-2xl font-normal">
+                I&apos;m <strong className="font-semibold text-[#f8fafc]">{profile.name}</strong>, a web developer exploring modern frontend technologies and building responsive web experiences through real-world projects.
+              </p>
+            </div>
 
             {/* Action CTA Buttons with Magnetic Snap */}
             <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-4 w-full sm:w-auto animate-fade-in-up [animation-delay:240ms]">

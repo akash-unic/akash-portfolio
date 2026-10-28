@@ -10,8 +10,6 @@ import { Badge } from "@/components/ui/Badge";
 import { useInView } from "@/hooks/useInView";
 import { useTilt } from "@/hooks/useTilt";
 import {
-  GraduationCap,
-  Award,
   BookOpen,
   CheckCircle2,
   Shield,
@@ -44,100 +42,98 @@ export const Education: React.FC = () => {
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <SectionHeading
-            badge="Credentials"
-            title="Education &amp; NCC Achievements"
-            description="Academic foundation in computer applications paired with certified military cadet training in the National Cadet Corps."
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative">
+            {/* Left Column: Sticky Narrative & Discipline Track (4 cols) */}
+            <div className="lg:col-span-4 sticky-scene-panel space-y-6">
+              <SectionHeading
+                chapter="05 // CREDENTIALS"
+                badge="Academic &amp; Cadet Rigor"
+                title="Education &amp; NCC Achievements"
+                description="Academic foundation in computer applications paired with certified military cadet training in the National Cadet Corps."
+              />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
-            {/* Left Column: Formal Education (7 cols) */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                  <GraduationCap className="w-5 h-5" />
+              <div className="p-5 rounded-2xl border border-white/[0.08] bg-[#131926]/80 backdrop-blur-sm space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                    Discipline &amp; Focus
+                  </span>
                 </div>
-                <h3 className="text-xl font-bold text-[#f8fafc] tracking-tight">
-                  Academic Background
-                </h3>
-              </div>
-
-              <div className="space-y-4">
-                {/* Higher Degree: BCA */}
-                <div ref={bcaTiltRef}>
-                  <Card surface="elevated" className="relative overflow-hidden border-indigo-500/30 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-950/20">
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <Badge variant="accent" size="sm" dot>
-                        Higher Education
-                      </Badge>
-                      <span className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/20">
-                        Semester 3 (Active)
-                      </span>
-                    </div>
-
-                    <h4 className="text-lg sm:text-xl font-bold text-[#f8fafc]">
-                      {education[0].degree}
-                    </h4>
-                    <p className="text-sm font-semibold text-zinc-300 mt-1">
-                      {education[0].institution}
-                    </p>
-
-                    <p className="mt-3 text-sm text-[#94a3b8] leading-relaxed">
-                      {education[0].details}
-                    </p>
-
-                    <div className="mt-4 pt-4 border-t border-white/[0.08] flex flex-wrap gap-2 text-xs font-mono text-zinc-400">
-                      <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
-                        CS Fundamentals
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
-                        Programming Logic
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
-                        Database Systems
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
-                        Web Technologies
-                      </span>
-                    </div>
-                  </Card>
-                </div>
-
-                {/* 12th & 10th Completed */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {education.slice(1).map((item) => (
-                    <Card key={item.degree} surface="default" className="p-5 transition-all duration-200 hover:border-white/[0.2] hover:bg-[#182032]">
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <BookOpen className="w-4 h-4 text-blue-400" />
-                        <Badge variant="neutral" size="sm">
-                          {item.status}
-                        </Badge>
-                      </div>
-
-                      <h5 className="text-sm font-bold text-[#f8fafc]">
-                        {item.degree}
-                      </h5>
-
-                      <p className="mt-2 text-xs text-[#94a3b8] leading-relaxed">
-                        {item.details}
-                      </p>
-                    </Card>
-                  ))}
+                <p className="text-xs text-[#94a3b8] leading-relaxed">
+                  Cadet training instills operational punctuality, accountability under pressure, and squad communication that directly reinforces engineering reliability.
+                </p>
+                <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                  <span>Chandigarh Univ.</span>
+                  <span>NCC Certified</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: NCC Military Cadet Achievements (5 cols) */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  <Award className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-bold text-[#f8fafc] tracking-tight">
-                  NCC Certifications
-                </h3>
+            {/* Right Column: Academic Track & NCC Credentials (8 cols) */}
+            <div className="lg:col-span-8 space-y-8">
+              {/* Higher Degree: BCA */}
+              <div ref={bcaTiltRef}>
+                <Card surface="elevated" className="relative overflow-hidden border-indigo-500/30 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-950/20">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <Badge variant="accent" size="sm" dot>
+                      Higher Education
+                    </Badge>
+                    <span className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/20">
+                      Semester 3 (Active)
+                    </span>
+                  </div>
+
+                  <h4 className="text-lg sm:text-xl font-bold text-[#f8fafc]">
+                    {education[0].degree}
+                  </h4>
+                  <p className="text-sm font-semibold text-zinc-300 mt-1">
+                    {education[0].institution}
+                  </p>
+
+                  <p className="mt-3 text-sm text-[#94a3b8] leading-relaxed">
+                    {education[0].details}
+                  </p>
+
+                  <div className="mt-4 pt-4 border-t border-white/[0.08] flex flex-wrap gap-2 text-xs font-mono text-zinc-400">
+                    <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
+                      CS Fundamentals
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
+                      Programming Logic
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
+                      Database Systems
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">
+                      Web Technologies
+                    </span>
+                  </div>
+                </Card>
               </div>
 
+              {/* 12th & 10th Completed */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {education.slice(1).map((item) => (
+                  <Card key={item.degree} surface="default" className="p-5 transition-all duration-200 hover:border-white/[0.2] hover:bg-[#182032]">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <BookOpen className="w-4 h-4 text-blue-400" />
+                      <Badge variant="neutral" size="sm">
+                        {item.status}
+                      </Badge>
+                    </div>
+
+                    <h5 className="text-sm font-bold text-[#f8fafc]">
+                      {item.degree}
+                    </h5>
+
+                    <p className="mt-2 text-xs text-[#94a3b8] leading-relaxed">
+                      {item.details}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+
+              {/* NCC Military Cadet Achievements */}
               <div ref={nccTiltRef}>
                 <Card surface="default" className="space-y-6 border-amber-500/20 transition-all duration-300 hover:border-amber-500/40 hover:shadow-2xl hover:shadow-amber-950/20">
                   <div className="flex items-start gap-3">
@@ -154,31 +150,33 @@ export const Education: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                     {achievements.map((ach) => (
                       <div
                         key={ach.title}
-                        className="p-4 rounded-xl border border-white/[0.08] bg-[#0a0d14]/70 transition-colors hover:border-amber-400/30"
+                        className="p-4 rounded-xl border border-white/[0.08] bg-[#0a0d14]/70 transition-colors hover:border-amber-400/30 flex flex-col justify-between"
                       >
-                        <div className="flex items-center justify-between gap-2 mb-1.5">
-                          <div className="flex items-center gap-2">
-                            <Medal className="w-4 h-4 text-amber-400 shrink-0" />
-                            <span className="text-sm font-bold text-[#f8fafc]">
-                              {ach.title}
-                            </span>
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <div className="flex items-center gap-2">
+                              <Medal className="w-4 h-4 text-amber-400 shrink-0" />
+                              <span className="text-sm font-bold text-[#f8fafc]">
+                                {ach.title}
+                              </span>
+                            </div>
+                            <Badge variant="warning" size="sm">
+                              Verified
+                            </Badge>
                           </div>
-                          <Badge variant="warning" size="sm">
-                            Verified
-                          </Badge>
+
+                          <span className="text-[11px] font-mono text-amber-400/90 block mb-1">
+                            {ach.badge}
+                          </span>
+
+                          <p className="text-xs text-[#94a3b8] leading-relaxed">
+                            {ach.description}
+                          </p>
                         </div>
-
-                        <span className="text-[11px] font-mono text-amber-400/90 block mb-1">
-                          {ach.badge}
-                        </span>
-
-                        <p className="text-xs text-[#94a3b8] leading-relaxed">
-                          {ach.description}
-                        </p>
                       </div>
                     ))}
                   </div>

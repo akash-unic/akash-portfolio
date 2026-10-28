@@ -42,12 +42,13 @@ export const About: React.FC = () => {
           }`}
         >
           <SectionHeading
+            chapter="02 // TRAJECTORY"
             badge="About Akash"
             title="Curious Student. Practical Builder."
             description="A developing web developer pursuing a BCA at Chandigarh University, turning foundational computer science principles into responsive, real-world web applications."
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative">
             {/* Main Editorial Story (7 cols) */}
             <div className="lg:col-span-7 space-y-6 text-[#94a3b8] leading-relaxed text-base sm:text-lg">
               <p>
@@ -84,8 +85,8 @@ export const About: React.FC = () => {
               </div>
             </div>
 
-            {/* Structured Quick-Facts Card (5 cols) with 3D Tilt */}
-            <div className="lg:col-span-5" ref={tiltCardRef}>
+            {/* Structured Quick-Facts Dossier with Sticky Stacking (5 cols) */}
+            <div className="lg:col-span-5 sticky-scene-panel" ref={tiltCardRef}>
               <Card surface="elevated" className="space-y-6 border-white/[0.1] shadow-2xl transition-all duration-300 hover:border-indigo-500/40">
                 <div>
                   <Badge variant="accent" size="sm" dot>

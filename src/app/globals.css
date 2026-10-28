@@ -103,7 +103,52 @@ body {
   animation: drawer-slide 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Reduced motion preference - completely disables animations */
+/* Masked Typography & Scroll-Driven Utility Classes */
+.text-mask-reveal {
+  overflow: hidden;
+  display: block;
+}
+
+.masked-line {
+  display: block;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease-out;
+}
+
+.shimmer-headline {
+  background: linear-gradient(
+    110deg,
+    #ffffff 0%,
+    #e0e7ff 25%,
+    #818cf8 45%,
+    #60a5fa 60%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Sticky Scene Stacking Rules */
+.sticky-scene-container {
+  position: relative;
+  width: 100%;
+}
+
+.sticky-scene-panel {
+  position: static;
+}
+
+@media (min-width: 1024px) {
+  .sticky-scene-panel {
+    position: sticky;
+    top: 7rem; /* offsets navbar cleanly */
+    align-self: flex-start;
+  }
+}
+
+/* Reduced motion preference - completely disables animations and resets transforms */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -118,5 +163,10 @@ body {
   .animate-fade-in-up,
   .animate-drawer {
     animation: none !important;
+  }
+
+  .masked-line {
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
