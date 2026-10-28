@@ -50,7 +50,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
   const projectImageSrc =
     project.id === "mikumantra"
       ? "/images/projects/mikumantra-storefront.png"
-      : "/images/projects/psd2ui-preview.jpg";
+      : "/images/projects/psd2ui-showcase.png";
 
   const projectLogoSrc =
     project.id === "mikumantra"
