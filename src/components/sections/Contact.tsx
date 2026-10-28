@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/Badge";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
 import { useInView } from "@/hooks/useInView";
 import { useMagnetic } from "@/hooks/useMagnetic";
+import { usePointerGlow } from "@/hooks/usePointerGlow";
 import {
   Mail,
   Copy,
@@ -34,8 +35,9 @@ interface FormErrors {
 export const Contact: React.FC = () => {
   const { profile } = portfolioData;
   const { ref: sectionRef, isInView } = useInView<HTMLDivElement>({ threshold: 0.1 });
-  const magneticSubmitRef = useMagnetic<HTMLDivElement>({ strength: 0.2 });
-  const magneticMailRef = useMagnetic<HTMLDivElement>({ strength: 0.2 });
+  const magneticSubmitRef = useMagnetic<HTMLDivElement>({ strength: 0.22, maxDistance: 16 });
+  const magneticMailRef = useMagnetic<HTMLDivElement>({ strength: 0.22, maxDistance: 16 });
+  const formGlowRef = usePointerGlow<HTMLDivElement>({ glowSize: 450, glowColor: "rgba(99, 102, 241, 0.12)" });
 
   // Form State
   const [formData, setFormData] = useState({
@@ -264,19 +266,30 @@ export const Contact: React.FC = () => {
             </div>
 
             {/* Right Column: Functional Direct Inquiry Form (7 cols) */}
-            <div className="lg:col-span-7">
-              <Card surface="default" className="p-6 sm:p-8 border-white/[0.1] shadow-2xl">
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Sparkles className="w-4 h-4 text-indigo-400" />
-                    <h3 className="text-xl font-bold text-[#f8fafc] tracking-tight">
-                      Send an Inquiry
-                    </h3>
+            <div className="lg:col-span-7" ref={formGlowRef}>
+              <Card surface="default" className="relative p-6 sm:p-8 border-white/[0.1] shadow-2xl overflow-hidden group">
+                {/* Pointer-Reactive Radial Gradient Overlay */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+                  style={{
+                    background:
+                      "radial-gradient(var(--glow-size, 450px) circle at var(--mouse-x, -500px) var(--mouse-y, -500px), var(--glow-color, rgba(99, 102, 241, 0.12)), transparent 70%)",
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div className="relative z-10">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Sparkles className="w-4 h-4 text-indigo-400" />
+                      <h3 className="text-xl font-bold text-[#f8fafc] tracking-tight">
+                        Send an Inquiry
+                      </h3>
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
+                      Fill out the form below to initiate an inquiry. Clicking submit composes your message directly to <strong className="text-zinc-200">{profile.email}</strong> via your email application.
+                    </p>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
-                    Fill out the form below to initiate an inquiry. Clicking submit composes your message directly to <strong className="text-zinc-200">{profile.email}</strong> via your email application.
-                  </p>
-                </div>
 
                 {submittedStatus && (
                   <div
@@ -434,7 +447,8 @@ export const Contact: React.FC = () => {
                     <strong className="text-zinc-300">Form Architecture Notice:</strong> This form uses genuine, client-safe <code className="text-indigo-300">mailto:</code> composition to ensure reliable delivery to <span className="text-zinc-200">{profile.email}</span> without third-party tracking or exposed API keys. To enable direct headless API dispatching in production, an authenticated email service (e.g. Resend or Formspree) can be integrated with private server environment variables.
                   </p>
                 </div>
-              </Card>
+              </div>
+            </Card>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { Badge } from "./Badge";
 import { GitHubIcon } from "@/components/icons/BrandIcons";
 import { useTilt } from "@/hooks/useTilt";
 import { useMagnetic } from "@/hooks/useMagnetic";
+import { usePointerGlow } from "@/hooks/usePointerGlow";
 import {
   ExternalLink,
   Globe,
@@ -33,8 +34,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
   // 3D card tilt hook
   const tiltCardRef = useTilt<HTMLElement>({ maxTilt: 4, perspective: 1100, scale: 1.01 });
 
+  // Pointer-reactive gradient glow hook
+  const glowRef = usePointerGlow<HTMLElement>({ glowSize: 450, glowColor: "rgba(99, 102, 241, 0.14)" });
+
+  // Combined ref callback
+  const handleRef = (node: HTMLElement | null) => {
+    tiltCardRef.current = node;
+    glowRef.current = node;
+  };
+
   // Magnetic button hook for primary live demo button
-  const magneticBtnRef = useMagnetic<HTMLDivElement>({ strength: 0.2 });
+  const magneticBtnRef = useMagnetic<HTMLDivElement>({ strength: 0.22, maxDistance: 14 });
 
   // Real project image assets from local inspection
   const projectImageSrc =
@@ -44,12 +54,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
 
   return (
     <article
-      ref={tiltCardRef}
-      className={`group rounded-2xl border border-white/[0.08] bg-[#131926]/90 overflow-hidden backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-950/30 flex flex-col justify-between ${
+      ref={handleRef}
+      className={`group relative rounded-2xl border border-white/[0.08] bg-[#131926]/90 overflow-hidden backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-950/30 flex flex-col justify-between ${
         className || ""
       }`}
     >
-      <div>
+      {/* Pointer-Reactive Ambient Gradient Glow */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+        style={{
+          background:
+            "radial-gradient(var(--glow-size, 450px) circle at var(--mouse-x, -500px) var(--mouse-y, -500px), var(--glow-color, rgba(99, 102, 241, 0.14)), transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10">
         {/* Browser Chrome Header Mockup */}
         <div className="border-b border-white/[0.08] bg-[#0a0d14] p-3 sm:p-4">
           <div className="flex items-center justify-between gap-2 mb-3">

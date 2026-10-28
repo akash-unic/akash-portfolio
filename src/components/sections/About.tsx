@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { useInView } from "@/hooks/useInView";
 import { useTilt } from "@/hooks/useTilt";
+import { usePointerGlow } from "@/hooks/usePointerGlow";
 import {
   GraduationCap,
   Code2,
@@ -20,6 +21,12 @@ import {
 export const About: React.FC = () => {
   const { ref: sectionRef, isInView } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const tiltCardRef = useTilt<HTMLDivElement>({ maxTilt: 5, perspective: 1000, scale: 1.01 });
+  const glowRef = usePointerGlow<HTMLDivElement>({ glowSize: 420, glowColor: "rgba(99, 102, 241, 0.14)" });
+
+  const handleDossierRef = (node: HTMLDivElement | null) => {
+    tiltCardRef.current = node;
+    glowRef.current = node;
+  };
 
   return (
     <Section
@@ -86,9 +93,19 @@ export const About: React.FC = () => {
             </div>
 
             {/* Structured Quick-Facts Dossier with Sticky Stacking (5 cols) */}
-            <div className="lg:col-span-5 sticky-scene-panel" ref={tiltCardRef}>
-              <Card surface="elevated" className="space-y-6 border-white/[0.1] shadow-2xl transition-all duration-300 hover:border-indigo-500/40">
-                <div>
+            <div className="lg:col-span-5 sticky-scene-panel" ref={handleDossierRef}>
+              <Card surface="elevated" className="relative space-y-6 border-white/[0.1] shadow-2xl transition-all duration-300 hover:border-indigo-500/40 overflow-hidden">
+                {/* Pointer-Reactive Radial Gradient Overlay */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+                  style={{
+                    background:
+                      "radial-gradient(var(--glow-size, 420px) circle at var(--mouse-x, -500px) var(--mouse-y, -500px), var(--glow-color, rgba(99, 102, 241, 0.14)), transparent 70%)",
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div className="relative z-10">
                   <Badge variant="accent" size="sm" dot>
                     Developer Profile
                   </Badge>

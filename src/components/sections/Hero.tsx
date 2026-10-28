@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useTilt } from "@/hooks/useTilt";
 import { useMagnetic } from "@/hooks/useMagnetic";
+import { usePointerGlow } from "@/hooks/usePointerGlow";
 import {
   ArrowDown,
   Mail,
@@ -19,31 +20,53 @@ import {
 export const Hero: React.FC = () => {
   const { profile } = portfolioData;
 
-  // Magnetic button ref for primary CTA
-  const magneticButtonRef = useMagnetic<HTMLDivElement>({ strength: 0.22 });
+  // Magnetic button ref for primary CTA with clamped movement
+  const magneticButtonRef = useMagnetic<HTMLDivElement>({ strength: 0.22, maxDistance: 16 });
 
   // 3D tilt ref for code workbench card
   const tiltCardRef = useTilt<HTMLDivElement>({ maxTilt: 5, perspective: 1000, scale: 1.01 });
+
+  // Pointer-reactive gradient glow for workbench
+  const workbenchGlowRef = usePointerGlow<HTMLDivElement>({ glowSize: 400, glowColor: "rgba(99, 102, 241, 0.15)" });
+
+  const handleWorkbenchRef = (node: HTMLDivElement | null) => {
+    tiltCardRef.current = node;
+    workbenchGlowRef.current = node;
+  };
 
   // Pointer spotlight position
   const heroRef = useRef<HTMLElement | null>(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 30 });
 
   useEffect(() => {
+    let rafId: number | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      setMousePos({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
+      if (rafId !== null) return;
+
+      rafId = requestAnimationFrame(() => {
+        if (!heroRef.current) return;
+        const rect = heroRef.current.getBoundingClientRect();
+        const rawX = ((e.clientX - rect.left) / rect.width) * 100;
+        const rawY = ((e.clientY - rect.top) / rect.height) * 100;
+        // Clamp to safe percentage range [0, 100]
+        setMousePos({
+          x: Math.max(0, Math.min(100, rawX)),
+          y: Math.max(0, Math.min(100, rawY)),
+        });
+        rafId = null;
+      });
     };
 
     const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (isFinePointer) {
+    const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (isFinePointer && !isReducedMotion) {
       window.addEventListener("mousemove", handleMouseMove, { passive: true });
     }
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
@@ -152,10 +175,10 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Abstract Developer Code Composition with 3D Tilt (5 cols) */}
+          {/* Right Column: Abstract Developer Code Composition with 3D Tilt & Pointer Glow (5 cols) */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end w-full animate-fade-in-up [animation-delay:200ms]">
             <div
-              ref={tiltCardRef}
+              ref={handleWorkbenchRef}
               className="relative w-full max-w-lg lg:max-w-none group cursor-pointer"
             >
               {/* Subtle background glow behind the card */}
@@ -164,10 +187,21 @@ export const Hero: React.FC = () => {
                 aria-hidden="true"
               />
 
-              {/* Code Workbench Window Component */}
-              <div className="rounded-2xl border border-white/[0.12] bg-[#101623]/95 shadow-2xl shadow-black/70 overflow-hidden backdrop-blur-md transition-all duration-300 group-hover:border-indigo-500/40">
-                {/* Editor Header */}
-                <div className="flex items-center justify-between px-4 py-3 bg-[#0a0d14] border-b border-white/[0.08]">
+              {/* Code Workbench Window Component with Pointer-Reactive Gradient */}
+              <div className="relative rounded-2xl border border-white/[0.12] bg-[#101623]/95 shadow-2xl shadow-black/70 overflow-hidden backdrop-blur-md transition-all duration-300 group-hover:border-indigo-500/40">
+                {/* Pointer-Reactive Radial Gradient Overlay */}
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+                  style={{
+                    background:
+                      "radial-gradient(var(--glow-size, 400px) circle at var(--mouse-x, -500px) var(--mouse-y, -500px), var(--glow-color, rgba(99, 102, 241, 0.15)), transparent 70%)",
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div className="relative z-10">
+                  {/* Editor Header */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-[#0a0d14] border-b border-white/[0.08]">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
                     <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
@@ -250,6 +284,7 @@ export const Hero: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
 
         {/* Compact Technology Strip */}
         <div className="mt-14 sm:mt-16 pt-8 border-t border-white/[0.08] animate-fade-in-up [animation-delay:350ms]">
