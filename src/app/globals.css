@@ -130,6 +130,38 @@ body {
   background-clip: text;
 }
 
+/* Atmospheric Architectural Background Utilities */
+.bg-subtle-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-dot-matrix {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.mask-radial-vignette {
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 25%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 25%, transparent 75%);
+}
+
+@keyframes slow-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-slow-spin {
+  animation: slow-rotate 48s linear infinite;
+  will-change: transform;
+}
+
 /* Sticky Scene Stacking Rules */
 .sticky-scene-container {
   position: relative;
@@ -161,7 +193,8 @@ body {
 
   .animate-ambient,
   .animate-fade-in-up,
-  .animate-drawer {
+  .animate-drawer,
+  .animate-slow-spin {
     animation: none !important;
   }
 

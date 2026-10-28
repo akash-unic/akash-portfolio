@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { AtmosphericBackground } from "@/components/ui/AtmosphericBackground";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -112,6 +113,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#0a0d14] text-[#f8fafc] overflow-x-hidden">
+        {/* Layered Atmospheric Visual Canvas */}
+        <AtmosphericBackground />
+
         {/* Dynamic Interactive Overlays */}
         <CustomCursor />
         <ScrollProgress />
