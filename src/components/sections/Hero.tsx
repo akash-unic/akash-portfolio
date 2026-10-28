@@ -10,12 +10,70 @@ import { usePointerGlow } from "@/hooks/usePointerGlow";
 import {
   ArrowDown,
   Mail,
-  CheckCircle2,
   Terminal,
   FileCode2,
   FolderGit2,
   ChevronDown,
+  GraduationCap,
+  Award,
+  Code2,
+  Sparkles,
 } from "lucide-react";
+
+// Tech metadata for enhanced styling, brand dots, and categorization
+const techDetails: Record<
+  string,
+  { category: string; dotColor: string; hoverBorder: string; hoverGlow: string }
+> = {
+  HTML: {
+    category: "Structure",
+    dotColor: "bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)]",
+    hoverBorder: "hover:border-orange-500/40",
+    hoverGlow: "hover:shadow-orange-500/10",
+  },
+  CSS: {
+    category: "Styling",
+    dotColor: "bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.6)]",
+    hoverBorder: "hover:border-indigo-500/40",
+    hoverGlow: "hover:shadow-indigo-500/10",
+  },
+  JavaScript: {
+    category: "Logic",
+    dotColor: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]",
+    hoverBorder: "hover:border-amber-500/40",
+    hoverGlow: "hover:shadow-amber-500/10",
+  },
+  React: {
+    category: "UI Library",
+    dotColor: "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]",
+    hoverBorder: "hover:border-cyan-500/40",
+    hoverGlow: "hover:shadow-cyan-500/10",
+  },
+  "Next.js": {
+    category: "Framework",
+    dotColor: "bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]",
+    hoverBorder: "hover:border-white/40",
+    hoverGlow: "hover:shadow-white/10",
+  },
+  "Tailwind CSS": {
+    category: "CSS Engine",
+    dotColor: "bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.6)]",
+    hoverBorder: "hover:border-sky-500/40",
+    hoverGlow: "hover:shadow-sky-500/10",
+  },
+  WordPress: {
+    category: "CMS",
+    dotColor: "bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.6)]",
+    hoverBorder: "hover:border-blue-500/40",
+    hoverGlow: "hover:shadow-blue-500/10",
+  },
+  MongoDB: {
+    category: "Database",
+    dotColor: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]",
+    hoverBorder: "hover:border-emerald-500/40",
+    hoverGlow: "hover:shadow-emerald-500/10",
+  },
+};
 
 export const Hero: React.FC = () => {
   const { profile } = portfolioData;
@@ -163,15 +221,47 @@ export const Hero: React.FC = () => {
               </Button>
             </div>
 
-            {/* Compact Real Experience Strip */}
-            <div className="mt-10 pt-6 border-t border-white/[0.08] w-full flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-[#94a3b8] animate-fade-in-up [animation-delay:300ms]">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>Chandigarh University (3rd Sem BCA)</span>
+            {/* Verified Experience & Credential Strip */}
+            <div className="mt-10 pt-6 border-t border-white/[0.08] w-full grid grid-cols-1 sm:grid-cols-2 gap-3.5 animate-fade-in-up [animation-delay:300ms]">
+              {/* Academic Enrollment Card */}
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/[0.08] via-[#131926]/80 to-[#101623]/80 backdrop-blur-sm transition-all duration-200 hover:border-indigo-400/40 hover:-translate-y-0.5 group shadow-sm shadow-indigo-950/30">
+                <div className="w-9 h-9 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-105 group-hover:border-indigo-400/50 transition-all">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs sm:text-[13px] font-bold text-white tracking-tight truncate group-hover:text-indigo-200 transition-colors">
+                      Chandigarh University
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 shrink-0">
+                      <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+                      Enrolled
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-zinc-400 block truncate">
+                    BCA · 3rd Semester
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>NCC &apos;A&apos; &amp; &apos;B&apos; Certified</span>
+
+              {/* NCC Certification Card */}
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-500/20 bg-gradient-to-r from-amber-500/[0.08] via-[#131926]/80 to-[#101623]/80 backdrop-blur-sm transition-all duration-200 hover:border-amber-400/40 hover:-translate-y-0.5 group shadow-sm shadow-amber-950/30">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 shrink-0 group-hover:scale-105 group-hover:border-amber-400/50 transition-all">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs sm:text-[13px] font-bold text-white tracking-tight truncate group-hover:text-amber-200 transition-colors">
+                      NCC &apos;A&apos; &amp; &apos;B&apos; Certified
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/25 shrink-0">
+                      Cadet
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-zinc-400 block truncate">
+                    Discipline &amp; Leadership
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -287,20 +377,63 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-        {/* Compact Technology Strip */}
-        <div className="mt-14 sm:mt-16 pt-8 border-t border-white/[0.08] animate-fade-in-up [animation-delay:350ms]">
-          <p className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3 text-center sm:text-left">
-            Technologies &amp; Core Stack
-          </p>
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 sm:gap-3">
-            {coreTechnologies.map((tech) => (
-              <span
-                key={tech}
-                className="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium bg-[#131926]/90 text-zinc-200 border border-white/[0.1] hover:border-indigo-400/40 hover:text-white transition-all duration-150 hover:-translate-y-0.5 select-none"
-              >
-                {tech}
+        {/* Enhanced Technologies & Core Stack Console */}
+        <div className="mt-14 sm:mt-16 relative rounded-2xl border border-white/[0.08] bg-[#0d121d]/75 backdrop-blur-md p-5 sm:p-6 shadow-2xl shadow-black/40 overflow-hidden animate-fade-in-up [animation-delay:350ms]">
+          {/* Subtle top edge gradient line */}
+          <div
+            className="pointer-events-none absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"
+            aria-hidden="true"
+          />
+
+          {/* Console Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 mb-4 border-b border-white/[0.06]">
+            <div className="flex items-center gap-2.5">
+              <div className="w-6 h-6 rounded-md bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <Code2 className="w-3.5 h-3.5" />
+              </div>
+              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+                Technologies &amp; Core Stack
+              </h2>
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                Production Ready
               </span>
-            ))}
+            </div>
+
+            <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-400">
+              <Sparkles className="w-3 h-3 text-amber-400" />
+              <span>Verified Frontend &amp; Web Development Toolkit</span>
+            </div>
+          </div>
+
+          {/* Interactive Technology Pills Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-3">
+            {coreTechnologies.map((tech) => {
+              const meta = techDetails[tech] || {
+                category: "Tool",
+                dotColor: "bg-indigo-400",
+                hoverBorder: "hover:border-indigo-500/40",
+                hoverGlow: "hover:shadow-indigo-500/10",
+              };
+
+              return (
+                <div
+                  key={tech}
+                  className={`group relative flex flex-col justify-between p-3 rounded-xl border border-white/[0.08] bg-[#131926]/80 hover:bg-[#182030] ${meta.hoverBorder} transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${meta.hoverGlow} cursor-default select-none`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`w-2 h-2 rounded-full ${meta.dotColor} group-hover:scale-125 transition-transform duration-200`} />
+                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">
+                      {meta.category}
+                    </span>
+                  </div>
+
+                  <span className="text-xs sm:text-[13px] font-bold font-mono text-zinc-200 group-hover:text-white transition-colors truncate">
+                    {tech}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </Container>
