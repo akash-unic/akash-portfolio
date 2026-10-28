@@ -81,7 +81,7 @@ export const Projects: React.FC = () => {
       id="projects"
       surface="canvas-subtle"
       spacing="default"
-      className="scroll-mt-20 border-b border-white/[0.06] relative overflow-hidden"
+      className="scroll-mt-20 border-b border-white/[0.06] relative overflow-clip"
     >
       {/* Subtle background ambient glow */}
       <div

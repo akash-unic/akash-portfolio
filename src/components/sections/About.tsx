@@ -33,7 +33,7 @@ export const About: React.FC = () => {
       id="about"
       surface="canvas-base"
       spacing="default"
-      className="scroll-mt-20 border-b border-white/[0.06] relative overflow-hidden"
+      className="scroll-mt-20 border-b border-white/[0.06] relative overflow-clip"
     >
       {/* Subtle background ambient glow */}
       <div

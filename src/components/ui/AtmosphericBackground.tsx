@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import React, { useEffect, useRef, useSyncExternalStore } from "react";
 
 const subscribeCapabilities = (callback: () => void) => {
   if (typeof window === "undefined") return () => {};
@@ -31,8 +31,8 @@ export const AtmosphericBackground: React.FC = () => {
     getServerSnapshot
   );
 
-  const [mousePos, setMousePos] = useState({ x: 50, y: 20 });
-  const [scrollYOffset, setScrollYOffset] = useState(0);
+  const spotlightRef = useRef<HTMLDivElement | null>(null);
+  const orbitRef = useRef<HTMLDivElement | null>(null);
 
   const mouseRef = useRef({ x: 50, y: 20 });
   const currentPosRef = useRef({ x: 50, y: 20 });
@@ -42,7 +42,7 @@ export const AtmosphericBackground: React.FC = () => {
   useEffect(() => {
     if (!isInteractive) return;
 
-    // Smooth lerp loop for the global ambient spotlight
+    // Smooth lerp loop for the global ambient spotlight - zero React re-renders!
     const render = () => {
       const lerp = 0.08; // very smooth, soft trailing factor
       const dx = mouseRef.current.x - currentPosRef.current.x;
@@ -51,10 +51,9 @@ export const AtmosphericBackground: React.FC = () => {
       currentPosRef.current.x += dx * lerp;
       currentPosRef.current.y += dy * lerp;
 
-      setMousePos({
-        x: Number(currentPosRef.current.x.toFixed(2)),
-        y: Number(currentPosRef.current.y.toFixed(2)),
-      });
+      if (spotlightRef.current) {
+        spotlightRef.current.style.background = `radial-gradient(circle 650px at ${currentPosRef.current.x.toFixed(1)}% ${currentPosRef.current.y.toFixed(1)}%, rgba(99, 102, 241, 0.09), transparent 70%)`;
+      }
 
       if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
         rafId.current = requestAnimationFrame(render);
@@ -81,9 +80,11 @@ export const AtmosphericBackground: React.FC = () => {
     const onScroll = () => {
       if (scrollRaf !== null) return;
       scrollRaf = requestAnimationFrame(() => {
-        // Subtle clamped parallax offset (max 60px)
-        const offset = Math.min(60, window.scrollY * 0.035);
-        setScrollYOffset(offset);
+        // Subtle clamped parallax offset (max 60px) updated directly without re-render
+        if (orbitRef.current) {
+          const offset = Math.min(60, window.scrollY * 0.035);
+          orbitRef.current.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+        }
         scrollRaf = null;
       });
     };
@@ -120,9 +121,10 @@ export const AtmosphericBackground: React.FC = () => {
       {/* Layer 2: Pointer-Reactive Ambient Spotlight (fine pointer only) */}
       {isInteractive && (
         <div
+          ref={spotlightRef}
           className="absolute inset-0 transition-opacity duration-700 opacity-60"
           style={{
-            background: `radial-gradient(circle 650px at ${mousePos.x}% ${mousePos.y}%, rgba(99, 102, 241, 0.09), transparent 70%)`,
+            background: "radial-gradient(circle 650px at 50% 20%, rgba(99, 102, 241, 0.09), transparent 70%)",
           }}
         />
       )}
@@ -133,9 +135,10 @@ export const AtmosphericBackground: React.FC = () => {
 
       {/* Layer 4: Abstract Geometric Developer Orbit Rings (Subtle Parallax) */}
       <div
-        className="absolute top-1/4 -right-28 sm:-right-20 w-[480px] h-[480px] sm:w-[600px] sm:h-[600px] opacity-[0.14] transition-transform duration-300 ease-out"
+        ref={orbitRef}
+        className="absolute top-1/4 -right-28 sm:-right-20 w-[480px] h-[480px] sm:w-[600px] sm:h-[600px] opacity-[0.14] transition-transform duration-300 ease-out will-change-transform"
         style={{
-          transform: `translate3d(0, ${scrollYOffset}px, 0)`,
+          transform: "translate3d(0, 0, 0)",
         }}
       >
         <svg

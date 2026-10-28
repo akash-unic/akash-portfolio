@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { portfolioData, coreTechnologies } from "@/data/portfolio";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -34,9 +34,9 @@ export const Hero: React.FC = () => {
     workbenchGlowRef.current = node;
   };
 
-  // Pointer spotlight position
+  // Pointer spotlight ref (direct DOM update for zero React re-renders)
   const heroRef = useRef<HTMLElement | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 30 });
+  const heroSpotlightRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let rafId: number | null = null;
@@ -45,15 +45,15 @@ export const Hero: React.FC = () => {
       if (rafId !== null) return;
 
       rafId = requestAnimationFrame(() => {
-        if (!heroRef.current) return;
+        if (!heroRef.current || !heroSpotlightRef.current) return;
         const rect = heroRef.current.getBoundingClientRect();
         const rawX = ((e.clientX - rect.left) / rect.width) * 100;
         const rawY = ((e.clientY - rect.top) / rect.height) * 100;
         // Clamp to safe percentage range [0, 100]
-        setMousePos({
-          x: Math.max(0, Math.min(100, rawX)),
-          y: Math.max(0, Math.min(100, rawY)),
-        });
+        const clampedX = Math.max(0, Math.min(100, rawX));
+        const clampedY = Math.max(0, Math.min(100, rawY));
+
+        heroSpotlightRef.current.style.background = `radial-gradient(circle 500px at ${clampedX.toFixed(1)}% ${clampedY.toFixed(1)}%, rgba(99, 102, 241, 0.12), transparent 70%)`;
         rafId = null;
       });
     };
@@ -76,13 +76,14 @@ export const Hero: React.FC = () => {
       ref={heroRef}
       id="home"
       aria-label="Hero Overview"
-      className="relative overflow-hidden min-h-[92vh] flex flex-col justify-between pt-10 pb-8 sm:pt-16 sm:pb-12 lg:pt-24 lg:pb-16 border-b border-white/[0.06]"
+      className="relative overflow-clip min-h-[92vh] flex flex-col justify-between pt-10 pb-8 sm:pt-16 sm:pb-12 lg:pt-24 lg:pb-16 border-b border-white/[0.06]"
     >
       {/* Subtle pointer-following interactive spotlight on fine-pointer devices */}
       <div
+        ref={heroSpotlightRef}
         className="pointer-events-none absolute inset-0 -z-10 transition-opacity duration-500 opacity-60"
         style={{
-          background: `radial-gradient(circle 500px at ${mousePos.x}% ${mousePos.y}%, rgba(99, 102, 241, 0.12), transparent 70%)`,
+          background: "radial-gradient(circle 500px at 50% 30%, rgba(99, 102, 241, 0.12), transparent 70%)",
         }}
         aria-hidden="true"
       />

@@ -27,7 +27,7 @@ export const Education: React.FC = () => {
       id="education"
       surface="canvas-base"
       spacing="default"
-      className="scroll-mt-20 border-b border-white/[0.06] relative overflow-hidden"
+      className="scroll-mt-20 border-b border-white/[0.06] relative overflow-clip"
     >
       {/* Subtle ambient accent */}
       <div

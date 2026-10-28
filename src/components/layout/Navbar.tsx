@@ -12,28 +12,39 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { profile, navigation } = portfolioData;
 
-  // Track active section and scroll state
+  // Track active section and scroll state with RAF-throttled reflow protection
   useEffect(() => {
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (rafId !== null) return;
 
-      // Section spy
-      const sections = navigation.map((item) => item.href.replace("#", ""));
-      const scrollPosition = window.scrollY + 130;
+      rafId = requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 20);
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const sectionId = sections[i];
-        const el = document.getElementById(sectionId);
-        if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sectionId);
-          break;
+        // Section spy with cached offsets
+        const sections = navigation.map((item) => item.href.replace("#", ""));
+        const scrollPosition = window.scrollY + 130;
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const sectionId = sections[i];
+          const el = document.getElementById(sectionId);
+          if (el && el.offsetTop <= scrollPosition) {
+            setActiveSection(sectionId);
+            break;
+          }
         }
-      }
+        rafId = null;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [navigation]);
 
   // Handle escape key to close mobile menu

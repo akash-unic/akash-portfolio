@@ -7,6 +7,7 @@ export function useScrollProgress(): number {
 
   useEffect(() => {
     let ticking = false;
+    let rafId: number | null = null;
 
     const updateScrollProgress = () => {
       const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
@@ -15,11 +16,12 @@ export function useScrollProgress(): number {
         setProgress(Math.min(100, Math.max(0, (scrollPx / winHeight) * 100)));
       }
       ticking = false;
+      rafId = null;
     };
 
     const onScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(updateScrollProgress);
+        rafId = window.requestAnimationFrame(updateScrollProgress);
         ticking = true;
       }
     };
@@ -29,6 +31,9 @@ export function useScrollProgress(): number {
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
     };
   }, []);
 
