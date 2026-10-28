@@ -49,7 +49,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
   // Real project image and logo assets from verified local checkouts
   const projectImageSrc =
     project.id === "mikumantra"
-      ? "/images/projects/mikumantra-banner.png"
+      ? "/images/projects/mikumantra-storefront.png"
       : "/images/projects/psd2ui-preview.jpg";
 
   const projectLogoSrc =
