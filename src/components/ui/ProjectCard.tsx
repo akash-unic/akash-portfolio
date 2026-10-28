@@ -46,11 +46,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
   // Magnetic button hook for primary live demo button
   const magneticBtnRef = useMagnetic<HTMLDivElement>({ strength: 0.22, maxDistance: 14 });
 
-  // Real project image assets from local inspection
+  // Real project image and logo assets from verified local checkouts
   const projectImageSrc =
     project.id === "mikumantra"
       ? "/images/projects/mikumantra-banner.png"
       : "/images/projects/psd2ui-preview.jpg";
+
+  const projectLogoSrc =
+    project.id === "mikumantra"
+      ? "/images/projects/mikumantra-logo.svg"
+      : "/images/projects/psd2ui-logo.png";
 
   return (
     <article
@@ -73,13 +78,25 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
         {/* Browser Chrome Header Mockup */}
         <div className="border-b border-white/[0.08] bg-[#0a0d14] p-3 sm:p-4">
           <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
+              </div>
+
+              {/* Verified Project Logo Icon */}
+              <div className="relative w-5 h-5 rounded overflow-hidden bg-white/5 p-0.5 border border-white/10 hidden sm:block">
+                <Image
+                  src={projectLogoSrc}
+                  alt={`${project.title} logo`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
 
-            <div className="px-3 py-1 rounded-md bg-[#131926] border border-white/[0.06] text-[11px] font-mono text-zinc-300 truncate max-w-[200px] sm:max-w-xs flex items-center gap-1.5">
+            <div className="px-3 py-1 rounded-md bg-[#131926] border border-white/[0.06] text-[11px] font-mono text-zinc-300 truncate max-w-[180px] sm:max-w-xs flex items-center gap-1.5">
               <Globe className="w-3 h-3 text-indigo-400 shrink-0" />
               <span className="truncate">{project.liveUrl}</span>
             </div>
@@ -89,19 +106,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) 
             </Badge>
           </div>
 
-          {/* Authentic Project Image Showcase with Cinematic Hover Scale */}
+          {/* Authentic Project Image Showcase with Elegant Reveal & Zoom */}
           <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#101623] border border-white/[0.06]">
             <Image
               src={projectImageSrc}
               alt={`${project.title} live interface preview`}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-              className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
-              loading="lazy"
+              priority={project.id === "mikumantra"}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 60vw"
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
 
-            {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14]/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
+            {/* Subtle Gradient Vignette Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14]/90 via-[#0a0d14]/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
 
             {/* Floating Live Badge */}
             <div className="absolute top-3 right-3 z-10">
