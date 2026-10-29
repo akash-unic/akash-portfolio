@@ -9,15 +9,15 @@ export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const surfaceClasses = {
-  "canvas-base": "bg-[#0a0d14] text-[#f8fafc]",
-  "canvas-subtle": "bg-[#0f1420] text-[#f8fafc] border-y border-white/[0.06]",
-  "contrast-light": "bg-[#f8fafc] text-[#0f172a] shadow-inner",
+  "canvas-base": "bg-transparent text-[#f8fafc]",
+  "canvas-subtle": "bg-gradient-to-b from-white/[0.02] via-[#0d121d]/40 to-transparent text-[#f8fafc] border-y border-white/[0.08] backdrop-blur-[2px]",
+  "contrast-light": "bg-white/[0.06] backdrop-blur-xl text-[#f8fafc] border-y border-white/[0.15]",
 };
 
 const spacingClasses = {
-  compact: "py-10 sm:py-14",
-  default: "py-16 sm:py-24",
-  spacious: "py-20 sm:py-32",
+  compact: "py-12 sm:py-16",
+  default: "py-16 sm:py-24 lg:py-28",
+  spacious: "py-24 sm:py-32 lg:py-40",
 };
 
 export const Section: React.FC<SectionProps> = ({
@@ -30,7 +30,7 @@ export const Section: React.FC<SectionProps> = ({
   return (
     <section
       className={cn(
-        "relative w-full transition-colors",
+        "relative w-full transition-colors isolate",
         surfaceClasses[surface],
         spacingClasses[spacing],
         className

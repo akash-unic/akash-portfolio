@@ -23,8 +23,8 @@ const getReducedMotionSnapshot = () => {
 const getServerReducedMotionSnapshot = () => false;
 
 export function useInView<T extends HTMLElement = HTMLDivElement>({
-  threshold = 0.15,
-  rootMargin = "0px 0px -50px 0px",
+  threshold = 0.02,
+  rootMargin = "120px 0px 60px 0px",
   triggerOnce = true,
 }: UseInViewOptions = {}) {
   const ref = useRef<T | null>(null);

@@ -112,7 +112,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#0a0d14] text-[#f8fafc] overflow-x-clip">
+      <body className="min-h-full flex flex-col bg-[#080b12] text-[#f8fafc] overflow-x-clip">
         {/* Layered Atmospheric Visual Canvas */}
         <AtmosphericBackground />
 

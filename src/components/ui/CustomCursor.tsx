@@ -35,8 +35,9 @@ export const CustomCursor: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isOverText, setIsOverText] = useState(false);
+  const [is3DMode, setIs3DMode] = useState(false);
 
-  // Position refs for high-performance physics
+  // Position refs for physics simulation
   const cursorDotRef = useRef<HTMLDivElement | null>(null);
   const cursorRingRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,11 +62,10 @@ export const CustomCursor: React.FC = () => {
         cursorRingRef.current.style.transform = `translate3d(${ringPos.current.x.toFixed(1)}px, ${ringPos.current.y.toFixed(1)}px, 0)`;
       }
 
-      // Check if follower has reached resting position (within 0.15px)
+      // Check if follower has reached resting position
       if (Math.abs(dx) > 0.15 || Math.abs(dy) > 0.15) {
         animFrameId.current = requestAnimationFrame(render);
       } else {
-        // Snap to exact target and SLEEP loop to save CPU/battery
         ringPos.current.x = mousePos.current.x;
         ringPos.current.y = mousePos.current.y;
         if (cursorRingRef.current) {
@@ -84,34 +84,33 @@ export const CustomCursor: React.FC = () => {
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      // Clamp coordinates to viewport boundaries strictly
       const clampedX = Math.max(0, Math.min(window.innerWidth, e.clientX));
       const clampedY = Math.max(0, Math.min(window.innerHeight, e.clientY));
 
       mousePos.current.x = clampedX;
       mousePos.current.y = clampedY;
 
-      // Center precision dot moves immediately for zero input lag
+      // Immediate dot positioning
       if (cursorDotRef.current) {
         cursorDotRef.current.style.transform = `translate3d(${clampedX}px, ${clampedY}px, 0)`;
       }
 
       if (!isVisible) setIsVisible(true);
 
-      // Contextual inspection: links/buttons vs body text
       const target = e.target as HTMLElement | null;
       if (target) {
+        const isCanvas = target.tagName.toLowerCase() === "canvas" || !!target.closest(".canvas-3d-target");
+        setIs3DMode(isCanvas);
+
         const interactive = target.closest(
           'a, button, input, select, textarea, [role="button"], article, .interactive-cursor'
         );
         setIsHovering(!!interactive);
 
-        // Detect text zones (paragraphs, headings) to soften follower for unhindered text selection
         const textTarget = target.closest('p, h1, h2, h3, h4, h5, h6, blockquote, code, pre');
-        setIsOverText(!!textTarget && !interactive);
+        setIsOverText(!!textTarget && !interactive && !isCanvas);
       }
 
-      // Awaken the lagging follower loop
       startAnimationLoop();
     };
 
@@ -164,22 +163,30 @@ export const CustomCursor: React.FC = () => {
       {/* Precision Center Dot */}
       <div
         ref={cursorDotRef}
-        className="fixed top-0 left-0 -ml-1 -mt-1 w-2 h-2 rounded-full bg-white transition-transform duration-75 ease-out shadow-[0_0_8px_rgba(255,255,255,0.85)] pointer-events-none select-none"
+        className="fixed top-0 left-0 -ml-1 -mt-1 w-2 h-2 rounded-full bg-white transition-transform duration-75 ease-out shadow-[0_0_10px_rgba(255,255,255,0.9)] pointer-events-none select-none"
       />
 
-      {/* Lagging Trailing Ring Follower with Adaptive Context */}
+      {/* Trailing Luminous Halo Ring with Adaptive Context */}
       <div
         ref={cursorRingRef}
-        className={`fixed top-0 left-0 -ml-5 -mt-5 rounded-full border border-indigo-400/60 transition-[width,height,margin,border-color,background-color,opacity] duration-200 ease-out backdrop-blur-[0.5px] pointer-events-none select-none ${
+        className={`fixed top-0 left-0 rounded-full border transition-[width,height,margin,border-color,background-color,opacity,transform] duration-200 ease-out backdrop-blur-[0.5px] pointer-events-none select-none flex items-center justify-center ${
           isClicking
-            ? "w-8 h-8 -ml-4 -mt-4 bg-indigo-500/25 border-indigo-300 scale-90"
+            ? "w-6 h-6 -ml-3 -mt-3 bg-indigo-500/30 border-indigo-300 scale-90"
+            : is3DMode
+            ? "w-11 h-11 -ml-[22px] -mt-[22px] bg-cyan-500/15 border-cyan-400 shadow-[0_0_16px_rgba(6,182,212,0.3)] scale-105"
             : isHovering
-            ? "w-14 h-14 -ml-7 -mt-7 bg-indigo-500/15 border-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.25)] scale-110"
+            ? "w-10 h-10 -ml-5 -mt-5 bg-indigo-500/20 border-indigo-400 shadow-[0_0_16px_rgba(99,102,241,0.25)] scale-105"
             : isOverText
-            ? "w-7 h-7 -ml-3.5 -mt-3.5 bg-indigo-500/5 border-indigo-300/40 opacity-40"
-            : "w-10 h-10 bg-indigo-500/5 shadow-[0_0_12px_rgba(99,102,241,0.15)] opacity-80"
+            ? "w-5 h-5 -ml-2.5 -mt-2.5 bg-indigo-500/5 border-indigo-300/40 opacity-30"
+            : "w-8 h-8 -ml-4 -mt-4 border-indigo-400/50 bg-indigo-500/5 shadow-[0_0_10px_rgba(99,102,241,0.12)] opacity-75"
         }`}
-      />
+      >
+        {is3DMode && (
+          <span className="text-[9px] font-mono font-bold text-cyan-300 tracking-wider">
+            3D
+          </span>
+        )}
+      </div>
     </div>
   );
 };

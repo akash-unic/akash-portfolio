@@ -6,29 +6,33 @@ import { Projects } from "@/components/sections/Projects";
 import { Education } from "@/components/sections/Education";
 import { Contact } from "@/components/sections/Contact";
 import { SectionConnector } from "@/components/ui/SectionConnector";
+import { SceneTracker } from "@/components/ui/SceneTracker";
 
 export default function Home() {
   return (
     <div className="flex flex-col w-full relative">
-      {/* 1. Origin & Overview (#home) */}
+      {/* 3D Scene HUD Waypoint Tracker (Desktop) */}
+      <SceneTracker />
+
+      {/* 1. The Awakening & Origin (#home) */}
       <Hero />
 
       {/* Narrative Transition: 01 -> 02 */}
-      <SectionConnector step="02" label="Trajectory &amp; Ethos" />
+      <SectionConnector step="02" label="The Developer &amp; Ethos" />
 
-      {/* 2. Trajectory (#about) */}
+      {/* 2. The Developer (#about) */}
       <About />
 
       {/* Narrative Transition: 02 -> 03 */}
-      <SectionConnector step="03" label="Capabilities &amp; Stack" />
+      <SectionConnector step="03" label="The Skill Constellation" />
 
-      {/* 3. Capabilities (#skills) */}
+      {/* 3. The Skill Constellation (#skills) */}
       <Skills />
 
       {/* Narrative Transition: 03 -> 04 */}
-      <SectionConnector step="04" label="Prototypes &amp; Builds" />
+      <SectionConnector step="04" label="The Project Gallery" />
 
-      {/* 4. Verified Builds (#projects) */}
+      {/* 4. The Project Gallery (#projects) */}
       <Projects />
 
       {/* Narrative Transition: 04 -> 05 */}
@@ -38,9 +42,9 @@ export default function Home() {
       <Education />
 
       {/* Narrative Transition: 05 -> 06 */}
-      <SectionConnector step="06" label="Direct Engagement" />
+      <SectionConnector step="06" label="The Final Connection" />
 
-      {/* 6. Direct Engagement (#contact) */}
+      {/* 6. The Final Connection (#contact) */}
       <Contact />
     </div>
   );

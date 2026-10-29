@@ -31,9 +31,10 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         className
       )}
     >
-      <div className={cn("mb-3.5 flex items-center gap-2.5", isCenter && "justify-center")}>
+      <div className={cn("mb-3.5 flex flex-wrap items-center gap-2.5", isCenter && "justify-center")}>
         {chapter && (
-          <span className="font-mono text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-md border border-indigo-500/20">
+          <span className="inline-flex items-center gap-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider font-semibold text-indigo-200 bg-indigo-500/15 px-3 py-1 rounded-full border border-indigo-400/30 backdrop-blur-md shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_6px_#818cf8]" />
             {chapter}
           </span>
         )}
@@ -51,8 +52,10 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       <div className="text-mask-reveal">
         <h2
           className={cn(
-            "text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight",
-            onContrast ? "text-slate-900" : "text-white"
+            "text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight",
+            onContrast
+              ? "text-slate-900"
+              : "text-gradient-metallic drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]"
           )}
         >
           {title}
@@ -62,8 +65,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       {description && (
         <p
           className={cn(
-            "mt-3 text-sm sm:text-base leading-relaxed",
-            onContrast ? "text-slate-600" : "text-zinc-400"
+            "mt-3 text-sm sm:text-base leading-relaxed font-normal",
+            onContrast ? "text-slate-600" : "text-slate-300"
           )}
         >
           {description}

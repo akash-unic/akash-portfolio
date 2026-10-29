@@ -19,11 +19,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  accent: "bg-indigo-500/10 text-indigo-300 border-indigo-500/25",
-  neutral: "bg-white/[0.05] text-zinc-300 border-white/[0.1]",
-  success: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
-  warning: "bg-amber-500/10 text-amber-400 border-amber-500/25",
-  contrast: "bg-slate-200/80 text-slate-800 border-slate-300/80",
+  accent: "bg-indigo-500/15 text-indigo-200 border-indigo-400/30 backdrop-blur-md shadow-[0_0_12px_rgba(99,102,241,0.2)]",
+  neutral: "bg-white/[0.06] text-zinc-200 border-white/[0.14] backdrop-blur-md",
+  success: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30 backdrop-blur-md shadow-[0_0_12px_rgba(16,185,129,0.2)]",
+  warning: "bg-amber-500/15 text-amber-300 border-amber-400/30 backdrop-blur-md shadow-[0_0_12px_rgba(245,158,11,0.2)]",
+  contrast: "bg-slate-200/90 text-slate-900 border-slate-300 backdrop-blur-md",
 };
 
 const dotClasses: Record<BadgeVariant, string> = {

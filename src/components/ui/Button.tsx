@@ -23,21 +23,21 @@ export interface ButtonProps
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-indigo-600 text-white hover:bg-indigo-500 shadow-sm shadow-indigo-950/40 border border-indigo-400/30 motion-safe:active:scale-[0.98]",
+    "relative bg-gradient-to-b from-indigo-500 to-indigo-600 text-white hover:from-indigo-400 hover:to-indigo-500 shadow-xl shadow-indigo-950/60 border border-indigo-300/40 hover:border-indigo-200 hover:shadow-[0_0_28px_rgba(99,102,241,0.45)] motion-safe:active:scale-[0.98] transition-all duration-200",
   secondary:
-    "bg-[#131926] text-zinc-100 hover:bg-[#192233] border border-white/[0.12] hover:border-white/[0.2] motion-safe:active:scale-[0.98]",
+    "relative bg-[#0e1424]/90 text-zinc-100 hover:bg-[#151f36] border border-white/[0.14] hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] backdrop-blur-xl motion-safe:active:scale-[0.98] transition-all duration-200",
   outline:
-    "bg-transparent text-zinc-200 border border-white/[0.16] hover:bg-white/[0.05] hover:border-white/[0.3] motion-safe:active:scale-[0.98]",
+    "relative bg-transparent text-zinc-200 border border-white/[0.2] hover:bg-white/[0.08] hover:border-indigo-400/50 motion-safe:active:scale-[0.98] backdrop-blur-md transition-all duration-200",
   ghost:
-    "bg-transparent text-zinc-400 hover:text-white hover:bg-white/[0.06] motion-safe:active:scale-[0.98]",
+    "bg-transparent text-zinc-400 hover:text-white hover:bg-white/[0.08] motion-safe:active:scale-[0.98] transition-all duration-200",
   contrast:
-    "bg-[#0f172a] text-white hover:bg-slate-800 shadow-sm border border-slate-900 motion-safe:active:scale-[0.98]",
+    "bg-white text-slate-950 hover:bg-slate-100 shadow-md font-semibold border border-white/60 motion-safe:active:scale-[0.98] transition-all duration-200",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-xs font-medium rounded-lg gap-1.5 min-h-[40px] sm:min-h-[36px]",
-  md: "px-4.5 py-2.5 text-sm font-medium rounded-xl gap-2 min-h-[44px]",
-  lg: "px-6 py-3.5 text-base font-semibold rounded-xl gap-2.5 min-h-[48px]",
+  sm: "px-3.5 py-1.5 text-xs font-medium rounded-xl gap-1.5 min-h-[40px] sm:min-h-[36px]",
+  md: "px-5 py-2.5 text-sm font-semibold rounded-xl gap-2 min-h-[44px]",
+  lg: "px-6 py-3.5 text-base font-bold rounded-xl gap-2.5 min-h-[48px]",
 };
 
 export const Button: React.FC<ButtonProps> = ({

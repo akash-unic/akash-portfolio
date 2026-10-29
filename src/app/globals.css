@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-canvas-base: #0a0d14;
-  --color-canvas-subtle: #0f1420;
-  --color-canvas-card: #131926;
-  --color-canvas-overlay: #192233;
+  --color-canvas-base: #080b12;
+  --color-canvas-subtle: #0d121d;
+  --color-canvas-card: #111726;
+  --color-canvas-overlay: #151f33;
   --color-canvas-contrast: #f8fafc;
   --color-canvas-contrast-subtle: #f1f5f9;
 
@@ -28,7 +28,7 @@
 }
 
 :root {
-  --background: #0a0d14;
+  --background: #080b12;
   --foreground: #f8fafc;
   color-scheme: dark;
 }
@@ -48,7 +48,7 @@ body {
 }
 
 ::selection {
-  background-color: rgba(99, 102, 241, 0.35);
+  background-color: rgba(99, 102, 241, 0.4);
   color: #ffffff;
 }
 
@@ -130,6 +130,29 @@ body {
   background-clip: text;
 }
 
+.text-gradient-metallic {
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 42%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 45%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-glass-specular {
+  position: relative;
+  background-color: rgba(10, 15, 28, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
 /* Atmospheric Architectural Background Utilities */
 .bg-subtle-grid {
   background-image: 
@@ -162,6 +185,42 @@ body {
   will-change: transform;
 }
 
+/* 3D Perspective & Film Surface Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Custom Cinematic Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080b12;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}
+
 /* Sticky Scene Stacking Rules */
 .sticky-scene-container {
   position: relative;
@@ -175,12 +234,19 @@ body {
 @media (min-width: 1024px) {
   .sticky-scene-panel {
     position: sticky;
-    top: 7rem; /* offsets navbar cleanly */
+    top: 6.5rem;
+    max-height: calc(100vh - 7.5rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     align-self: flex-start;
+  }
+  .sticky-scene-panel::-webkit-scrollbar {
+    display: none;
   }
 }
 
-/* Reduced motion preference - completely disables animations and resets transforms */
+/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
