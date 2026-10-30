@@ -85,6 +85,7 @@ export const Hero: React.FC = () => {
   // GSAP ScrollTrigger Refs
   const heroStageRef = useRef<HTMLElement | null>(null);
   const heroContentRef = useRef<HTMLDivElement | null>(null);
+  const heroIdentityRef = useRef<HTMLDivElement | null>(null);
   const heroTelemetryRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);
   const heroSubtitleRef = useRef<HTMLDivElement | null>(null);
@@ -123,17 +124,289 @@ export const Hero: React.FC = () => {
 
     // Apply cinematic dissolve transformation across all devices (desktop & mobile touchscreens)
     if (!isReducedMotion && heroStageRef.current && heroTitleRef.current) {
-      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+      const mm = gsap.matchMedia();
 
-      const ctx = gsap.context(() => {
+      // Mobile & Tablet (< 1024px): Sequential storytelling with pauses:
+      // 1. Hero page content dissolves out with exact blur (blur 6px / blur 4px)
+      // 2. AFTER SOME TIME (cosmic space pause, nothing on screen)
+      // 3. "3D Interactive Core Developer Console" section appears front & center
+      // 4. "3D Interactive Core Developer Console" dissolves out with exact blur (blur 6px)
+      // 5. AFTER SOME TIME (cosmic space pause with portal flash)
+      // 6. Next section appears
+      mm.add("(max-width: 1023px)", () => {
+        if (!heroStageRef.current) return;
+
+        const topElements = [heroTelemetryRef.current, heroTitleRef.current].filter(Boolean);
+        const middleElements = [heroSubtitleRef.current, heroButtonsRef.current].filter(Boolean);
+
+        // Initial setup for mobile: Hero content visible with zero blur
+        if (topElements.length > 0) {
+          gsap.set(topElements, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", pointerEvents: "auto" });
+        }
+        if (middleElements.length > 0) {
+          gsap.set(middleElements, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", pointerEvents: "auto" });
+        }
+        if (heroCredentialsRef.current) {
+          gsap.set(heroCredentialsRef.current, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", pointerEvents: "auto" });
+        }
+        if (heroScrollIndicatorRef.current) {
+          gsap.set(heroScrollIndicatorRef.current, { opacity: 1, y: 0, pointerEvents: "auto" });
+        }
+
+        // 3D Interactive Core starts hidden
+        if (heroCenterpieceRef.current) {
+          gsap.set(heroCenterpieceRef.current, {
+            opacity: 0,
+            scale: 0.9,
+            y: 40,
+            filter: "blur(6px)",
+            pointerEvents: "none",
+          });
+        }
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: heroStageRef.current,
+            start: "top top",
+            end: "+=260%",
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.4,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            fastScrollEnd: true,
+          },
+        });
+
+        // =========================================================================
+        // STEP 1: Hero content dissolves out with exact original blur disappearing effect
+        // Timeline range: 0.0 -> 2.5 (Normalized: 0% -> 25%)
+        // =========================================================================
+        if (topElements.length > 0) {
+          tl.to(
+            topElements,
+            {
+              scale: 1.12,
+              y: -50,
+              opacity: 0,
+              filter: "blur(6px)",
+              duration: 2.5,
+              ease: "power2.inOut",
+              onComplete: () => {
+                topElements.forEach((el) => {
+                  if (el) el.style.pointerEvents = "none";
+                });
+              },
+              onReverseComplete: () => {
+                topElements.forEach((el) => {
+                  if (el) el.style.pointerEvents = "auto";
+                });
+              },
+            },
+            0
+          );
+        }
+
+        if (middleElements.length > 0) {
+          tl.to(
+            middleElements,
+            {
+              y: 35,
+              opacity: 0,
+              filter: "blur(4px)",
+              duration: 2.5,
+              ease: "power1.in",
+              onComplete: () => {
+                middleElements.forEach((el) => {
+                  if (el) el.style.pointerEvents = "none";
+                });
+              },
+              onReverseComplete: () => {
+                middleElements.forEach((el) => {
+                  if (el) el.style.pointerEvents = "auto";
+                });
+              },
+            },
+            0
+          );
+        }
+
+        if (heroCredentialsRef.current) {
+          tl.to(
+            heroCredentialsRef.current,
+            {
+              y: 40,
+              opacity: 0,
+              filter: "blur(6px)",
+              duration: 2.5,
+              ease: "power2.in",
+              onComplete: () => {
+                if (heroCredentialsRef.current) heroCredentialsRef.current.style.pointerEvents = "none";
+              },
+              onReverseComplete: () => {
+                if (heroCredentialsRef.current) heroCredentialsRef.current.style.pointerEvents = "auto";
+              },
+            },
+            0
+          );
+        }
+
+        if (heroScrollIndicatorRef.current) {
+          tl.to(
+            heroScrollIndicatorRef.current,
+            {
+              y: 20,
+              opacity: 0,
+              duration: 1.6,
+              ease: "power1.in",
+            },
+            0
+          );
+        }
+
+        // =========================================================================
+        // STEP 2: "AFTER SOME TIME" GAP 1 (2.5 -> 4.0)
+        // Hero content is completely gone at 2.5.
+        // "3D Interactive Core Developer Console" has not appeared yet.
+        // The user scrolls through pure cosmic ambient space.
+        // =========================================================================
+
+        // =========================================================================
+        // STEP 3: "3D Interactive Core Developer Console" appears
+        // Emerges from blur(6px) into clarity: 4.0 -> 5.2 (duration 1.2)
+        // Focal plateau: 5.2 -> 7.0 (duration 1.8)
+        // =========================================================================
+        if (heroCenterpieceRef.current) {
+          tl.fromTo(
+            heroCenterpieceRef.current,
+            {
+              opacity: 0,
+              scale: 0.9,
+              y: 40,
+              filter: "blur(6px)",
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 1.2,
+              ease: "power2.out",
+              onStart: () => {
+                if (heroCenterpieceRef.current) heroCenterpieceRef.current.style.pointerEvents = "auto";
+              },
+              onReverseComplete: () => {
+                if (heroCenterpieceRef.current) heroCenterpieceRef.current.style.pointerEvents = "none";
+              },
+            },
+            4.0
+          );
+
+          // =========================================================================
+          // STEP 4: "3D Interactive Core Developer Console" disappears with exact blur
+          // Dissolves into blur(6px): 7.0 -> 8.2 (duration 1.2)
+          // At 8.2, 3D Core is completely gone!
+          // =========================================================================
+          tl.to(
+            heroCenterpieceRef.current,
+            {
+              scale: 0.9,
+              y: -50,
+              opacity: 0,
+              filter: "blur(6px)",
+              duration: 1.2,
+              ease: "power2.in",
+              onComplete: () => {
+                if (heroCenterpieceRef.current) heroCenterpieceRef.current.style.pointerEvents = "none";
+              },
+              onReverseComplete: () => {
+                if (heroCenterpieceRef.current) heroCenterpieceRef.current.style.pointerEvents = "auto";
+              },
+            },
+            7.0
+          );
+        }
+
+        // =========================================================================
+        // STEP 5: "AFTER SOME TIME" GAP 2 (8.2 -> 9.8)
+        // 3D Core is completely gone at 8.2.
+        // Next section has not appeared yet.
+        // Cosmic portal flash pulses through the void.
+        // =========================================================================
+        if (heroPortalFlashRef.current) {
+          tl.fromTo(
+            heroPortalFlashRef.current,
+            { opacity: 0, scale: 0.8 },
+            { opacity: 0.55, scale: 1.3, duration: 0.8, ease: "power2.out" },
+            8.4
+          );
+          tl.to(
+            heroPortalFlashRef.current,
+            { opacity: 0, scale: 1.45, duration: 0.6, ease: "power1.in" },
+            9.2
+          );
+        }
+
+        // =========================================================================
+        // STEP 6: Next section appears
+        // Timeline completes at 10.0, hero unpins, and Scene 02 appears!
+        // =========================================================================
+      });
+
+      // Desktop (>= 1024px): Simultaneous side-by-side dissolve preserved with original full fidelity
+      mm.add("(min-width: 1024px)", () => {
+        // Reset desktop styles
+        const topElements = [heroTelemetryRef.current, heroTitleRef.current].filter(Boolean);
+        const middleElements = [heroSubtitleRef.current, heroButtonsRef.current].filter(Boolean);
+
+        if (topElements.length > 0) {
+          gsap.set(topElements, { opacity: 1, scale: 1, y: 0, filter: "none", pointerEvents: "auto" });
+        }
+        if (middleElements.length > 0) {
+          gsap.set(middleElements, { opacity: 1, scale: 1, y: 0, filter: "none", pointerEvents: "auto" });
+        }
+        if (heroCenterpieceRef.current) {
+          gsap.set(heroCenterpieceRef.current, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: "none",
+            pointerEvents: "auto",
+          });
+        }
+        if (heroCredentialsRef.current) {
+          gsap.set(heroCredentialsRef.current, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: "none",
+            pointerEvents: "auto",
+          });
+        }
+        if (heroTechConsoleRef.current) {
+          gsap.set(heroTechConsoleRef.current, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: "none",
+            pointerEvents: "auto",
+          });
+        }
+        if (heroScrollIndicatorRef.current) {
+          gsap.set(heroScrollIndicatorRef.current, {
+            opacity: 1,
+            y: 0,
+            pointerEvents: "auto",
+          });
+        }
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: heroStageRef.current,
             start: "top top",
             end: "+=80%",
             pin: true,
-            pinSpacing: true,
-            scrub: isMobile ? 0.2 : 0.8,
+            scrub: 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             fastScrollEnd: true,
@@ -141,16 +414,14 @@ export const Hero: React.FC = () => {
         });
 
         // 1. Title & Top Telemetry scale smoothly and recede upward into depth
-        const topElements = [heroTelemetryRef.current, heroTitleRef.current].filter(Boolean);
         if (topElements.length > 0) {
           tl.to(
             topElements,
             {
-              scale: 1.1,
-              y: -45,
+              scale: 1.12,
+              y: -50,
               opacity: 0,
-              filter: isMobile ? "blur(3px)" : "blur(6px)",
-              force3D: true,
+              filter: "blur(6px)",
               ease: "power2.inOut",
             },
             0
@@ -158,15 +429,13 @@ export const Hero: React.FC = () => {
         }
 
         // 2. Subtitle, statement and action buttons disperse cleanly
-        const middleElements = [heroSubtitleRef.current, heroButtonsRef.current].filter(Boolean);
         if (middleElements.length > 0) {
           tl.to(
             middleElements,
             {
               y: 35,
               opacity: 0,
-              filter: isMobile ? "blur(2.5px)" : "blur(4px)",
-              force3D: true,
+              filter: "blur(4px)",
               ease: "power1.in",
             },
             0
@@ -178,25 +447,23 @@ export const Hero: React.FC = () => {
           tl.to(
             heroCenterpieceRef.current,
             {
-              scale: 0.92,
+              scale: 0.9,
               opacity: 0,
-              filter: isMobile ? "none" : "blur(6px)",
-              force3D: true,
+              filter: "blur(6px)",
               ease: "power2.in",
             },
             0
           );
         }
 
-        // 4. Verified Credentials Strip (Chandigarh Univ & NCC Cadet cards) resolves and dissolves cleanly
+        // 4. Verified Credentials Strip resolves and dissolves cleanly
         if (heroCredentialsRef.current) {
           tl.to(
             heroCredentialsRef.current,
             {
               y: 40,
               opacity: 0,
-              filter: isMobile ? "none" : "blur(6px)",
-              force3D: true,
+              filter: "blur(6px)",
               ease: "power2.in",
             },
             0
@@ -210,8 +477,7 @@ export const Hero: React.FC = () => {
             {
               y: 50,
               opacity: 0,
-              filter: isMobile ? "none" : "blur(6px)",
-              force3D: true,
+              filter: "blur(6px)",
               ease: "power2.in",
             },
             0
@@ -225,7 +491,6 @@ export const Hero: React.FC = () => {
             {
               y: 20,
               opacity: 0,
-              force3D: true,
               ease: "power1.in",
             },
             0
@@ -236,12 +501,12 @@ export const Hero: React.FC = () => {
         if (heroPortalFlashRef.current) {
           tl.fromTo(
             heroPortalFlashRef.current,
-            { opacity: 0, scale: 0.85 },
-            { opacity: 0.5, scale: 1.25, force3D: true, ease: "power2.out" },
+            { opacity: 0, scale: 0.8 },
+            { opacity: 0.5, scale: 1.3, ease: "power2.out" },
             0.35
           );
         }
-      }, heroStageRef);
+      });
 
       const refreshTimer = setTimeout(() => {
         ScrollTrigger.refresh();
@@ -255,7 +520,7 @@ export const Hero: React.FC = () => {
       return () => {
         clearTimeout(refreshTimer);
         window.removeEventListener("orientationchange", handleOrientation);
-        ctx.revert();
+        mm.revert();
         ScrollTrigger.refresh();
       };
     }
@@ -268,13 +533,13 @@ export const Hero: React.FC = () => {
       aria-label="Hero Overview"
       className="relative overflow-clip min-h-[96vh] flex flex-col justify-between pt-8 pb-10 sm:pt-14 sm:pb-14 lg:pt-20 lg:pb-16"
     >
-      {/* Dimensional Portal Energy Flash for Scroll Transition (Hardware-Accelerated Radial Gradient) */}
+      {/* Dimensional Portal Energy Flash for Scroll Transition (Optical Radial Glow - No CSS blur to keep 3D background crisp) */}
       <div
         ref={heroPortalFlashRef}
-        className="pointer-events-none fixed inset-0 z-20 opacity-0 will-change-transform"
+        className="pointer-events-none fixed inset-0 z-10 opacity-0 will-change-transform"
         style={{
           background:
-            "radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.28) 0%, rgba(99, 102, 241, 0.16) 45%, transparent 70%)",
+            "radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.22) 0%, rgba(99, 102, 241, 0.12) 38%, transparent 68%)",
         }}
         aria-hidden="true"
       />
@@ -282,10 +547,13 @@ export const Hero: React.FC = () => {
       <Container size="xl" className="my-auto relative z-10">
         <div
           ref={heroContentRef}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center"
+          className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center min-h-[560px] sm:min-h-[620px] lg:min-h-0"
         >
           {/* Left Column: Cinematic Spatial Typography & Identity (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
+          <div
+            ref={heroIdentityRef}
+            className="lg:col-span-7 flex flex-col items-start text-left w-full will-change-transform"
+          >
             {/* Top HUD Telemetry Strip */}
             <div
               ref={heroTelemetryRef}
@@ -414,7 +682,7 @@ export const Hero: React.FC = () => {
           {/* Right Column: Interactive 3D Hologram Core with Switchable Code Dossier (5 cols) */}
           <div
             ref={heroCenterpieceRef}
-            className="lg:col-span-5 flex flex-col items-center justify-center w-full will-change-transform"
+            className="w-full flex flex-col items-center justify-center will-change-transform lg:col-span-5 max-lg:absolute max-lg:inset-x-0 max-lg:top-1/2 max-lg:-translate-y-1/2 max-lg:z-20 max-lg:px-2"
           >
             {/* View Mode Toggle Controls */}
             <div className="mb-3.5 inline-flex p-1 rounded-2xl bg-[#0a0d14]/85 border border-white/[0.12] shadow-xl backdrop-blur-xl">
@@ -564,7 +832,7 @@ export const Hero: React.FC = () => {
         {/* Technologies & Core Stack Console */}
         <div
           ref={heroTechConsoleRef}
-          className="mt-14 sm:mt-16 relative rounded-3xl border border-white/[0.1] bg-[#0d121d]/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl overflow-hidden will-change-transform"
+          className="mt-14 sm:mt-16 relative rounded-3xl border border-white/[0.1] bg-[#0d121d]/60 backdrop-blur-xl p-5 sm:p-6 shadow-2xl overflow-hidden will-change-transform hidden lg:block"
         >
           <div
             className="pointer-events-none absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-400/50 to-transparent"

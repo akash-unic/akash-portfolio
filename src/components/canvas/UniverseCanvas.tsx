@@ -35,23 +35,23 @@ export const UniverseCanvas: React.FC = () => {
     let height = window.innerHeight;
     const isMobile = width < 768;
 
-    // 1. Scene & Camera Setup
+    // 1. Scene & Camera Setup - Low fog density so cosmic structures stay crisp & visible
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x04060c, 0.015);
+    scene.fog = new THREE.FogExp2(0x04060c, 0.006);
 
     const camera = new THREE.PerspectiveCamera(58, width / height, 0.1, 1000);
     camera.position.set(0, 0, 18);
 
-    // 2. High-Performance WebGL Renderer
+    // 2. High-Performance WebGL Renderer - Native DPR and Antialias on all devices
     const renderer = new THREE.WebGLRenderer({
       powerPreference: "high-performance",
-      antialias: !isMobile,
+      antialias: true,
       alpha: true,
       stencil: false,
       depth: true,
     });
 
-    const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(dpr);
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -66,7 +66,7 @@ export const UniverseCanvas: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     // 3. Volumetric Stardust & Cosmic Particle Universe
-    const particleCount = isMobile ? 700 : 1200;
+    const particleCount = isMobile ? 900 : 1200;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -123,13 +123,13 @@ export const UniverseCanvas: React.FC = () => {
     const particleTexture = createParticleTexture();
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: isMobile ? 1.7 : 1.9,
+      size: isMobile ? 1.9 : 1.9,
       map: particleTexture,
       vertexColors: true,
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      opacity: isMobile ? 0.35 : 0.38,
+      opacity: isMobile ? 0.42 : 0.38,
     });
 
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
@@ -138,7 +138,7 @@ export const UniverseCanvas: React.FC = () => {
     // 4. Central Dimensional Energy Portal (Opening Scene - Offset to frame content)
     const portalGroup = new THREE.Group();
     // Offset slightly to the right on desktop to align with the right-hand stage
-    portalGroup.position.set(isMobile ? 0 : 3.2, 0, -4);
+    portalGroup.position.set(isMobile ? 0 : 3.2, 0, isMobile ? -2 : -4);
 
     // Outer Torus Energy Ring
     const outerRingGeo = new THREE.TorusGeometry(5.4, 0.05, 16, 120);
@@ -146,7 +146,7 @@ export const UniverseCanvas: React.FC = () => {
       color: 0x6366f1,
       wireframe: true,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.32,
       blending: THREE.AdditiveBlending,
     });
     const outerRing = new THREE.Mesh(outerRingGeo, outerRingMat);
@@ -157,7 +157,7 @@ export const UniverseCanvas: React.FC = () => {
     const innerRingMat = new THREE.MeshBasicMaterial({
       color: 0x38bdf8,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.38,
       blending: THREE.AdditiveBlending,
     });
     const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
@@ -168,7 +168,7 @@ export const UniverseCanvas: React.FC = () => {
     const gyroRingMat = new THREE.MeshBasicMaterial({
       color: 0xa855f7,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.40,
       blending: THREE.AdditiveBlending,
     });
     const gyroRing = new THREE.Mesh(gyroRingGeo, gyroRingMat);
@@ -180,7 +180,7 @@ export const UniverseCanvas: React.FC = () => {
       color: 0xc7d2fe,
       wireframe: true,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.35,
       blending: THREE.AdditiveBlending,
     });
     const coreIcosaMesh = new THREE.Mesh(coreIcosaGeo, coreIcosaWireMat);
@@ -192,7 +192,7 @@ export const UniverseCanvas: React.FC = () => {
       color: 0x38bdf8,
       wireframe: true,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.45,
       blending: THREE.AdditiveBlending,
     });
     const coreInnerMesh = new THREE.Mesh(coreInnerGeo, coreInnerMat);
@@ -205,7 +205,7 @@ export const UniverseCanvas: React.FC = () => {
       color: 0x6366f1,
       wireframe: true,
       transparent: true,
-      opacity: 0.06,
+      opacity: 0.10,
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide,
     });
@@ -217,7 +217,7 @@ export const UniverseCanvas: React.FC = () => {
 
     // 6. Floating Spatial Geometric Shards (Spread along the scroll path)
     const shardGroup = new THREE.Group();
-    const shardCount = isMobile ? 6 : 12;
+    const shardCount = isMobile ? 8 : 12;
     const shardMeshes: THREE.Mesh[] = [];
 
     const shardGeometries = [
@@ -232,14 +232,14 @@ export const UniverseCanvas: React.FC = () => {
         color: i % 2 === 0 ? 0x6366f1 : 0x38bdf8,
         wireframe: true,
         transparent: true,
-        opacity: 0.18,
+        opacity: isMobile ? 0.28 : 0.18,
         blending: THREE.AdditiveBlending,
       });
       const mesh = new THREE.Mesh(geo, mat);
 
       const side = i % 2 === 0 ? 1 : -1;
       mesh.position.set(
-        side * (5.5 + Math.random() * 6),
+        side * (isMobile ? (2.6 + Math.random() * 2.2) : (5.5 + Math.random() * 6)),
         (Math.random() - 0.5) * 8,
         -15 - i * 10
       );
@@ -257,7 +257,7 @@ export const UniverseCanvas: React.FC = () => {
 
     for (let i = 0; i < nodeCount; i++) {
       const angle = (i / nodeCount) * Math.PI * 2;
-      const radius = 4.2 + (i % 2) * 1.5;
+      const radius = isMobile ? (2.2 + (i % 2) * 0.8) : (4.2 + (i % 2) * 1.5);
       const x = Math.cos(angle) * radius + (Math.random() - 0.5) * 0.8;
       const y = Math.sin(angle) * radius + (Math.random() - 0.5) * 0.8;
       const z = -60 + (Math.random() - 0.5) * 3;
@@ -268,7 +268,7 @@ export const UniverseCanvas: React.FC = () => {
       const nodeMat = new THREE.MeshBasicMaterial({
         color: i === 4 ? 0xc7d2fe : 0x818cf8,
         transparent: true,
-        opacity: 0.45,
+        opacity: 0.50,
         blending: THREE.AdditiveBlending,
       });
       const nodeMesh = new THREE.Mesh(nodeGeo, nodeMat);

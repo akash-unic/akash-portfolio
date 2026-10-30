@@ -91,12 +91,12 @@ export const AtmosphericBackground: React.FC = () => {
       {/* Layer 1: True 3D Spatial WebGL Universe */}
       <UniverseCanvas />
 
-      {/* Layer 2: Protective Reading Scrim (Ensures Content Contrast & Legibility) */}
+      {/* Layer 2: Protective Reading Scrim (Ensures Content Contrast while keeping 3D background crisp and luminous) */}
       <div
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 80% 70% at 50% 40%, rgba(8, 11, 18, 0.75) 0%, rgba(8, 11, 18, 0.5) 50%, rgba(6, 8, 14, 0.85) 100%)
+            radial-gradient(ellipse 85% 75% at 50% 40%, rgba(8, 11, 18, 0.40) 0%, rgba(8, 11, 18, 0.28) 50%, rgba(6, 8, 14, 0.65) 100%)
           `,
         }}
       />
