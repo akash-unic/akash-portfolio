@@ -86,6 +86,7 @@ export const Hero: React.FC = () => {
   const heroStageRef = useRef<HTMLElement | null>(null);
   const heroContentRef = useRef<HTMLDivElement | null>(null);
   const heroIdentityRef = useRef<HTMLDivElement | null>(null);
+  const heroBgBlurRef = useRef<HTMLDivElement | null>(null);
   const heroTelemetryRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);
   const heroSubtitleRef = useRef<HTMLDivElement | null>(null);
@@ -126,20 +127,29 @@ export const Hero: React.FC = () => {
     if (!isReducedMotion && heroStageRef.current && heroTitleRef.current) {
       const mm = gsap.matchMedia();
 
-      // Mobile & Tablet (< 1024px): Sequential storytelling with pauses:
-      // 1. Hero page content dissolves out with exact blur (blur 6px / blur 4px)
-      // 2. AFTER SOME TIME (cosmic space pause, nothing on screen)
-      // 3. "3D Interactive Core Developer Console" section appears front & center
-      // 4. "3D Interactive Core Developer Console" dissolves out with exact blur (blur 6px)
-      // 5. AFTER SOME TIME (cosmic space pause with portal flash)
-      // 6. Next section appears
+      // Mobile & Tablet (< 1024px):
+      // 1. Initial State (scroll 0%): Background is blurred (via heroBgBlurRef at opacity 1).
+      // 2. As user scrolls initially: Background blur disappears from 100% to 0% opacity.
+      // 3. AFTER the bg disappears 100%: Hero section effect starts (content dissolves into depth).
+      // 4. AFTER SOME TIME: Cosmic pause.
+      // 5. "3D Interactive Core Developer Console" appears with fade in (opacity 0 -> 1, pure fade, no blur).
+      // 6. Active plateau: held visible, centered, and interactive.
+      // 7. "3D Interactive Core Developer Console" disappears with fade out (opacity 1 -> 0, pure fade, no blur).
+      // 8. AFTER SOME TIME: Cosmic portal passage.
+      // 9. Next section appears!
       mm.add("(max-width: 1023px)", () => {
         if (!heroStageRef.current) return;
 
         const topElements = [heroTelemetryRef.current, heroTitleRef.current].filter(Boolean);
         const middleElements = [heroSubtitleRef.current, heroButtonsRef.current].filter(Boolean);
 
-        // Initial setup for mobile: Hero content visible with zero blur
+        // Initial setup for mobile:
+        // Background blur starts at 100% opacity
+        if (heroBgBlurRef.current) {
+          gsap.set(heroBgBlurRef.current, { opacity: 1, display: "block" });
+        }
+
+        // Hero content visible with zero blur
         if (topElements.length > 0) {
           gsap.set(topElements, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", pointerEvents: "auto" });
         }
@@ -153,13 +163,13 @@ export const Hero: React.FC = () => {
           gsap.set(heroScrollIndicatorRef.current, { opacity: 1, y: 0, pointerEvents: "auto" });
         }
 
-        // 3D Interactive Core starts hidden
+        // 3D Interactive Core starts hidden with pure opacity 0 (NO blur)
         if (heroCenterpieceRef.current) {
           gsap.set(heroCenterpieceRef.current, {
             opacity: 0,
-            scale: 0.9,
-            y: 40,
-            filter: "blur(6px)",
+            scale: 0.92,
+            y: 30,
+            filter: "none",
             pointerEvents: "none",
           });
         }
@@ -168,7 +178,7 @@ export const Hero: React.FC = () => {
           scrollTrigger: {
             trigger: heroStageRef.current,
             start: "top top",
-            end: "+=260%",
+            end: "+=300%",
             pin: true,
             pinSpacing: true,
             scrub: 0.4,
@@ -179,8 +189,33 @@ export const Hero: React.FC = () => {
         });
 
         // =========================================================================
-        // STEP 1: Hero content dissolves out with exact original blur disappearing effect
-        // Timeline range: 0.0 -> 2.5 (Normalized: 0% -> 25%)
+        // STEP 1: Background blur disappears from 100% to 0% opacity
+        // Timeline range: 0.0 -> 2.0 (duration: 2.0)
+        // At 0% scroll: background is blurred.
+        // During 0.0 -> 2.0: background blur fades 100% -> 0% opacity, revealing crisp 3D universe!
+        // =========================================================================
+        if (heroBgBlurRef.current) {
+          tl.fromTo(
+            heroBgBlurRef.current,
+            {
+              opacity: 1,
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+            },
+            {
+              opacity: 0,
+              backdropFilter: "blur(0px)",
+              WebkitBackdropFilter: "blur(0px)",
+              duration: 2.0,
+              ease: "power1.inOut",
+            },
+            0
+          );
+        }
+
+        // =========================================================================
+        // STEP 2: AFTER the bg disappears 100%, THEN hero section effect starts
+        // Timeline range: 2.2 -> 4.4 (duration: 2.2)
         // =========================================================================
         if (topElements.length > 0) {
           tl.to(
@@ -190,7 +225,7 @@ export const Hero: React.FC = () => {
               y: -50,
               opacity: 0,
               filter: "blur(6px)",
-              duration: 2.5,
+              duration: 2.2,
               ease: "power2.inOut",
               onComplete: () => {
                 topElements.forEach((el) => {
@@ -203,7 +238,7 @@ export const Hero: React.FC = () => {
                 });
               },
             },
-            0
+            2.2
           );
         }
 
@@ -214,7 +249,7 @@ export const Hero: React.FC = () => {
               y: 35,
               opacity: 0,
               filter: "blur(4px)",
-              duration: 2.5,
+              duration: 2.2,
               ease: "power1.in",
               onComplete: () => {
                 middleElements.forEach((el) => {
@@ -227,7 +262,7 @@ export const Hero: React.FC = () => {
                 });
               },
             },
-            0
+            2.2
           );
         }
 
@@ -238,7 +273,7 @@ export const Hero: React.FC = () => {
               y: 40,
               opacity: 0,
               filter: "blur(6px)",
-              duration: 2.5,
+              duration: 2.2,
               ease: "power2.in",
               onComplete: () => {
                 if (heroCredentialsRef.current) heroCredentialsRef.current.style.pointerEvents = "none";
@@ -247,7 +282,7 @@ export const Hero: React.FC = () => {
                 if (heroCredentialsRef.current) heroCredentialsRef.current.style.pointerEvents = "auto";
               },
             },
-            0
+            2.2
           );
         }
 
@@ -257,39 +292,37 @@ export const Hero: React.FC = () => {
             {
               y: 20,
               opacity: 0,
-              duration: 1.6,
+              duration: 1.5,
               ease: "power1.in",
             },
-            0
+            2.2
           );
         }
 
         // =========================================================================
-        // STEP 2: "AFTER SOME TIME" GAP 1 (2.5 -> 4.0)
-        // Hero content is completely gone at 2.5.
+        // STEP 3: "AFTER SOME TIME" GAP 1 (4.4 -> 5.6)
+        // Hero content is completely gone at 4.4.
         // "3D Interactive Core Developer Console" has not appeared yet.
-        // The user scrolls through pure cosmic ambient space.
+        // User scrolls through pure, unblurred, crystal clear 3D cosmic universe!
         // =========================================================================
 
         // =========================================================================
-        // STEP 3: "3D Interactive Core Developer Console" appears
-        // Emerges from blur(6px) into clarity: 4.0 -> 5.2 (duration 1.2)
-        // Focal plateau: 5.2 -> 7.0 (duration 1.8)
+        // STEP 4: "3D Interactive Core Developer Console" appears with pure FADE (5.6 -> 6.8)
+        // (Pure opacity 0 -> 1 and scale 0.92 -> 1, NO blur filter)
+        // Focal plateau: 6.8 -> 8.6
         // =========================================================================
         if (heroCenterpieceRef.current) {
           tl.fromTo(
             heroCenterpieceRef.current,
             {
               opacity: 0,
-              scale: 0.9,
-              y: 40,
-              filter: "blur(6px)",
+              scale: 0.92,
+              y: 30,
             },
             {
               opacity: 1,
               scale: 1,
               y: 0,
-              filter: "blur(0px)",
               duration: 1.2,
               ease: "power2.out",
               onStart: () => {
@@ -299,21 +332,20 @@ export const Hero: React.FC = () => {
                 if (heroCenterpieceRef.current) heroCenterpieceRef.current.style.pointerEvents = "none";
               },
             },
-            4.0
+            5.6
           );
 
           // =========================================================================
-          // STEP 4: "3D Interactive Core Developer Console" disappears with exact blur
-          // Dissolves into blur(6px): 7.0 -> 8.2 (duration 1.2)
-          // At 8.2, 3D Core is completely gone!
+          // STEP 5: "3D Interactive Core Developer Console" disappears with pure FADE OUT (8.6 -> 9.8)
+          // (Pure opacity 1 -> 0 and scale 1 -> 0.92, NO blur filter)
+          // At 9.8, 3D Core is completely gone!
           // =========================================================================
           tl.to(
             heroCenterpieceRef.current,
             {
-              scale: 0.9,
-              y: -50,
               opacity: 0,
-              filter: "blur(6px)",
+              scale: 0.92,
+              y: -35,
               duration: 1.2,
               ease: "power2.in",
               onComplete: () => {
@@ -323,33 +355,33 @@ export const Hero: React.FC = () => {
                 if (heroCenterpieceRef.current) heroCenterpieceRef.current.style.pointerEvents = "auto";
               },
             },
-            7.0
+            8.6
           );
         }
 
         // =========================================================================
-        // STEP 5: "AFTER SOME TIME" GAP 2 (8.2 -> 9.8)
-        // 3D Core is completely gone at 8.2.
+        // STEP 6: "AFTER SOME TIME" GAP 2 (9.8 -> 11.6)
+        // 3D Core is completely gone at 9.8.
         // Next section has not appeared yet.
-        // Cosmic portal flash pulses through the void.
+        // User travels through unblurred portal tunnel and cosmic stardust.
         // =========================================================================
         if (heroPortalFlashRef.current) {
           tl.fromTo(
             heroPortalFlashRef.current,
             { opacity: 0, scale: 0.8 },
             { opacity: 0.55, scale: 1.3, duration: 0.8, ease: "power2.out" },
-            8.4
+            10.0
           );
           tl.to(
             heroPortalFlashRef.current,
             { opacity: 0, scale: 1.45, duration: 0.6, ease: "power1.in" },
-            9.2
+            10.8
           );
         }
 
         // =========================================================================
-        // STEP 6: Next section appears
-        // Timeline completes at 10.0, hero unpins, and Scene 02 appears!
+        // STEP 7: Next section appears
+        // At 11.8 -> 12.0, timeline completes, hero unpins, and Scene 02 appears!
         // =========================================================================
       });
 
@@ -359,6 +391,9 @@ export const Hero: React.FC = () => {
         const topElements = [heroTelemetryRef.current, heroTitleRef.current].filter(Boolean);
         const middleElements = [heroSubtitleRef.current, heroButtonsRef.current].filter(Boolean);
 
+        if (heroBgBlurRef.current) {
+          gsap.set(heroBgBlurRef.current, { opacity: 1, display: "block" });
+        }
         if (topElements.length > 0) {
           gsap.set(topElements, { opacity: 1, scale: 1, y: 0, filter: "none", pointerEvents: "auto" });
         }
@@ -412,6 +447,26 @@ export const Hero: React.FC = () => {
             fastScrollEnd: true,
           },
         });
+
+        // Background blur disappears initially on scroll
+        if (heroBgBlurRef.current) {
+          tl.fromTo(
+            heroBgBlurRef.current,
+            {
+              opacity: 1,
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+            },
+            {
+              opacity: 0,
+              backdropFilter: "blur(0px)",
+              WebkitBackdropFilter: "blur(0px)",
+              duration: 0.35,
+              ease: "power1.inOut",
+            },
+            0
+          );
+        }
 
         // 1. Title & Top Telemetry scale smoothly and recede upward into depth
         if (topElements.length > 0) {
@@ -533,6 +588,18 @@ export const Hero: React.FC = () => {
       aria-label="Hero Overview"
       className="relative overflow-clip min-h-[96vh] flex flex-col justify-between pt-8 pb-10 sm:pt-14 sm:pb-14 lg:pt-20 lg:pb-16"
     >
+      {/* Initial Background Blur Overlay: At 0% scroll, background is blurred. Fades 100% -> 0% opacity on scroll before Hero effect starts */}
+      <div
+        ref={heroBgBlurRef}
+        className="pointer-events-none fixed inset-0 z-0 will-change-[opacity,backdrop-filter]"
+        style={{
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          backgroundColor: "rgba(8, 11, 18, 0.45)",
+        }}
+        aria-hidden="true"
+      />
+
       {/* Dimensional Portal Energy Flash for Scroll Transition (Optical Radial Glow - No CSS blur to keep 3D background crisp) */}
       <div
         ref={heroPortalFlashRef}
@@ -682,7 +749,7 @@ export const Hero: React.FC = () => {
           {/* Right Column: Interactive 3D Hologram Core with Switchable Code Dossier (5 cols) */}
           <div
             ref={heroCenterpieceRef}
-            className="w-full flex flex-col items-center justify-center will-change-transform lg:col-span-5 max-lg:absolute max-lg:inset-x-0 max-lg:top-1/2 max-lg:-translate-y-1/2 max-lg:z-20 max-lg:px-2"
+            className="w-full flex flex-col items-center justify-center will-change-transform lg:col-span-5 max-lg:absolute max-lg:inset-x-0 max-lg:top-1/2 max-lg:-translate-y-1/2 max-lg:z-20 max-lg:px-2 max-lg:opacity-0 max-lg:pointer-events-none"
           >
             {/* View Mode Toggle Controls */}
             <div className="mb-3.5 inline-flex p-1 rounded-2xl bg-[#0a0d14]/85 border border-white/[0.12] shadow-xl backdrop-blur-xl">
