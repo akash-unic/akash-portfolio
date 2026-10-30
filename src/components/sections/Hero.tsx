@@ -163,13 +163,13 @@ export const Hero: React.FC = () => {
           gsap.set(heroScrollIndicatorRef.current, { opacity: 1, y: 0, pointerEvents: "auto" });
         }
 
-        // 3D Interactive Core starts hidden with pure opacity 0 (NO blur)
+        // 3D Interactive Core starts hidden with zoom-in scale 0.82 and blur(8px)
         if (heroCenterpieceRef.current) {
           gsap.set(heroCenterpieceRef.current, {
             opacity: 0,
-            scale: 0.92,
-            y: 30,
-            filter: "none",
+            scale: 0.82,
+            y: 0,
+            filter: "blur(8px)",
             pointerEvents: "none",
           });
         }
@@ -307,22 +307,24 @@ export const Hero: React.FC = () => {
         // =========================================================================
 
         // =========================================================================
-        // STEP 4: "3D Interactive Core Developer Console" appears with pure FADE (5.6 -> 6.8)
-        // (Pure opacity 0 -> 1 and scale 0.92 -> 1, NO blur filter)
-        // Focal plateau: 6.8 -> 8.6
+        // STEP 4: "3D Interactive Core Developer Console" appears with ZOOM-IN WITH BLUR (5.6 -> 6.8)
+        // Zooms in (scale: 0.82 -> 1.0) with blur clearing (blur(8px) -> blur(0px)) and opacity (0 -> 1)
+        // Focal plateau: 6.8 -> 8.6 (crystal clear, interactive)
         // =========================================================================
         if (heroCenterpieceRef.current) {
           tl.fromTo(
             heroCenterpieceRef.current,
             {
               opacity: 0,
-              scale: 0.92,
-              y: 30,
+              scale: 0.82,
+              y: 0,
+              filter: "blur(8px)",
             },
             {
               opacity: 1,
               scale: 1,
               y: 0,
+              filter: "blur(0px)",
               duration: 1.2,
               ease: "power2.out",
               onStart: () => {
@@ -336,16 +338,17 @@ export const Hero: React.FC = () => {
           );
 
           // =========================================================================
-          // STEP 5: "3D Interactive Core Developer Console" disappears with pure FADE OUT (8.6 -> 9.8)
-          // (Pure opacity 1 -> 0 and scale 1 -> 0.92, NO blur filter)
+          // STEP 5: "3D Interactive Core Developer Console" disappears with ZOOM-IN WITH BLUR (8.6 -> 9.8)
+          // Zooms in (scale: 1.0 -> 1.18) with blur increasing (blur(0px) -> blur(8px)) and opacity (1 -> 0)
           // At 9.8, 3D Core is completely gone!
           // =========================================================================
           tl.to(
             heroCenterpieceRef.current,
             {
               opacity: 0,
-              scale: 0.92,
-              y: -35,
+              scale: 1.18,
+              y: 0,
+              filter: "blur(8px)",
               duration: 1.2,
               ease: "power2.in",
               onComplete: () => {
@@ -749,7 +752,7 @@ export const Hero: React.FC = () => {
           {/* Right Column: Interactive 3D Hologram Core with Switchable Code Dossier (5 cols) */}
           <div
             ref={heroCenterpieceRef}
-            className="w-full flex flex-col items-center justify-center will-change-transform lg:col-span-5 max-lg:absolute max-lg:inset-x-0 max-lg:top-1/2 max-lg:-translate-y-1/2 max-lg:z-20 max-lg:px-2 max-lg:opacity-0 max-lg:pointer-events-none"
+            className="w-full flex flex-col items-center justify-center will-change-[transform,opacity,filter] lg:col-span-5 max-lg:absolute max-lg:inset-x-0 max-lg:top-1/2 max-lg:-translate-y-1/2 max-lg:z-20 max-lg:px-2 max-lg:opacity-0 max-lg:pointer-events-none"
           >
             {/* View Mode Toggle Controls */}
             <div className="mb-3.5 inline-flex p-1 rounded-2xl bg-[#0a0d14]/85 border border-white/[0.12] shadow-xl backdrop-blur-xl">
