@@ -197,11 +197,11 @@ export const Skills: React.FC = () => {
                 <span className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider px-3 pt-1 block">
                   Category Filter
                 </span>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex overflow-x-auto sm:overflow-visible sm:flex-wrap gap-1.5 pb-1 sm:pb-0 scrollbar-none">
                   <button
                     type="button"
                     onClick={() => setSelectedFilter("all")}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 ${
                       selectedFilter === "all"
                         ? "bg-indigo-600 text-white font-bold shadow-md shadow-indigo-950/80"
                         : "text-slate-400 hover:text-white hover:bg-white/[0.08]"
@@ -215,7 +215,7 @@ export const Skills: React.FC = () => {
                       key={cat.id}
                       type="button"
                       onClick={() => setSelectedFilter(cat.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 ${
                         selectedFilter === cat.id
                           ? "bg-indigo-600 text-white font-bold shadow-md shadow-indigo-950/80"
                           : "text-slate-400 hover:text-white hover:bg-white/[0.08]"

@@ -268,29 +268,29 @@ export const Hero: React.FC = () => {
             {/* Top HUD Telemetry Strip */}
             <div
               ref={heroTelemetryRef}
-              className="mb-4 sm:mb-6 flex flex-wrap items-center gap-2.5 animate-fade-in-up will-change-transform"
+              className="mb-4 sm:mb-6 flex flex-wrap items-center gap-2 animate-fade-in-up will-change-transform"
             >
-              <span className="inline-flex items-center gap-2 px-3.5 py-1 text-xs font-mono font-semibold tracking-wider uppercase rounded-full bg-indigo-500/15 text-indigo-200 border border-indigo-400/30 backdrop-blur-md shadow-[0_0_15px_rgba(99,102,241,0.25)]">
-                <span className="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8] animate-pulse" />
-                WEB DEVELOPER • BCA CHANDIGARH UNIV.
+              <span className="inline-flex items-center gap-2 px-3 py-1 text-[11px] sm:text-xs font-mono font-semibold tracking-wider uppercase rounded-full bg-indigo-500/15 text-indigo-200 border border-indigo-400/30 backdrop-blur-md shadow-[0_0_15px_rgba(99,102,241,0.25)] max-w-full">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8] animate-pulse shrink-0" />
+                <span className="truncate">WEB DEVELOPER • BCA CHANDIGARH UNIV.</span>
               </span>
 
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 backdrop-blur-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Available for Roles &amp; Freelance
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[11px] sm:text-xs font-mono rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 backdrop-blur-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span>Available for Roles</span>
               </span>
             </div>
 
             {/* Oversized Cinematic Typography with 3D Depth */}
             <div
               ref={heroTitleRef}
-              className="mb-2 will-change-transform"
+              className="mb-2 will-change-transform w-full"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 text-xs font-mono font-semibold tracking-wider uppercase rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-400/30 backdrop-blur-md mb-2 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:text-xs font-mono font-semibold tracking-wider uppercase rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-400/30 backdrop-blur-md mb-2 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                 <span>SPATIAL WEB ARCHITECTURE</span>
               </div>
-              <h1 className="text-4xl xs:text-5xl sm:text-6xl lg:text-7xl font-black tracking-[-0.03em] text-gradient-metallic drop-shadow-[0_4px_32px_rgba(0,0,0,0.95)] leading-tight">
+              <h1 className="text-[clamp(2.15rem,8.5vw,4.5rem)] font-black tracking-[-0.03em] text-gradient-metallic drop-shadow-[0_4px_32px_rgba(0,0,0,0.95)] leading-[1.08] break-words">
                 {profile.name.toUpperCase()}
               </h1>
               <div className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-indigo-300 font-bold mt-1.5">

@@ -7,12 +7,16 @@ import { Education } from "@/components/sections/Education";
 import { Contact } from "@/components/sections/Contact";
 import { SectionConnector } from "@/components/ui/SectionConnector";
 import { SceneTracker } from "@/components/ui/SceneTracker";
+import { MobileHUD } from "@/components/ui/MobileHUD";
 
 export default function Home() {
   return (
     <div className="flex flex-col w-full relative">
-      {/* 3D Scene HUD Waypoint Tracker (Desktop) */}
+      {/* 3D Scene HUD Waypoint Tracker (Desktop xl+) */}
       <SceneTracker />
+
+      {/* Floating Tactical HUD & Back-to-Top (Mobile / Tablet) */}
+      <MobileHUD />
 
       {/* 1. The Awakening & Origin (#home) */}
       <Hero />

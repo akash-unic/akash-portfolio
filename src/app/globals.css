@@ -103,6 +103,36 @@ body {
   animation: drawer-slide 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+@keyframes menu-item-slide-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.animate-menu-item {
+  animation: menu-item-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes portal-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.18;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.28;
+  }
+}
+
+.animate-portal-pulse {
+  animation: portal-pulse 6s ease-in-out infinite;
+}
+
 /* Masked Typography & Scroll-Driven Utility Classes */
 .text-mask-reveal {
   overflow: hidden;
@@ -260,7 +290,9 @@ body {
   .animate-ambient,
   .animate-fade-in-up,
   .animate-drawer,
-  .animate-slow-spin {
+  .animate-slow-spin,
+  .animate-menu-item,
+  .animate-portal-pulse {
     animation: none !important;
   }
 

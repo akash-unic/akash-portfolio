@@ -347,6 +347,15 @@ export const UniverseCanvas: React.FC = () => {
       targetMouseY = (e.clientY / height - 0.5) * 2;
     };
 
+    const onDeviceOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma !== null && e.beta !== null) {
+        const clampedGamma = Math.max(-45, Math.min(45, e.gamma));
+        const clampedBeta = Math.max(15, Math.min(75, e.beta));
+        targetMouseX = (clampedGamma / 45) * 1.0;
+        targetMouseY = ((clampedBeta - 45) / 30) * 1.0;
+      }
+    };
+
     const onResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -358,6 +367,7 @@ export const UniverseCanvas: React.FC = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("deviceorientation", onDeviceOrientation, { passive: true });
 
     let isVisible = true;
     const onVisibilityChange = () => {
@@ -454,6 +464,7 @@ export const UniverseCanvas: React.FC = () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("deviceorientation", onDeviceOrientation);
       document.removeEventListener("visibilitychange", onVisibilityChange);
 
       if (container && renderer.domElement && container.contains(renderer.domElement)) {

@@ -334,7 +334,7 @@ export const Contact: React.FC = () => {
                           }
                           aria-invalid={!!errors.name}
                           aria-describedby={errors.name ? "name-error" : undefined}
-                          className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors"
+                          className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-base sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors"
                         />
                         {errors.name && (
                           <p id="name-error" className="mt-1.5 text-xs text-rose-400 flex items-center gap-1">
@@ -362,7 +362,7 @@ export const Contact: React.FC = () => {
                           }
                           aria-invalid={!!errors.email}
                           aria-describedby={errors.email ? "email-error" : undefined}
-                          className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors"
+                          className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-base sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors"
                         />
                         {errors.email && (
                           <p id="email-error" className="mt-1.5 text-xs text-rose-400 flex items-center gap-1">
@@ -388,7 +388,7 @@ export const Contact: React.FC = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, subject: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-sm text-white focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-base sm:text-sm text-white focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors"
                       >
                         <option value="Job Opportunity">Job Opportunity (Junior Web Developer)</option>
                         <option value="Internship Inquiry">Frontend Engineering Internship</option>
@@ -422,7 +422,7 @@ export const Contact: React.FC = () => {
                         }
                         aria-invalid={!!errors.message}
                         aria-describedby={errors.message ? "message-error" : undefined}
-                        className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors resize-y"
+                        className="w-full px-4 py-3 rounded-2xl border border-white/[0.12] bg-[#080c16] text-base sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-colors resize-y"
                       />
                       {errors.message && (
                         <p id="message-error" className="mt-1.5 text-xs text-rose-400 flex items-center gap-1">
