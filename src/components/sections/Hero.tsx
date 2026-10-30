@@ -123,6 +123,8 @@ export const Hero: React.FC = () => {
 
     // Apply cinematic dissolve transformation across all devices (desktop & mobile touchscreens)
     if (!isReducedMotion && heroStageRef.current && heroTitleRef.current) {
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -131,7 +133,7 @@ export const Hero: React.FC = () => {
             end: "+=80%",
             pin: true,
             pinSpacing: true,
-            scrub: 0.8,
+            scrub: isMobile ? 0.2 : 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             fastScrollEnd: true,
@@ -144,10 +146,11 @@ export const Hero: React.FC = () => {
           tl.to(
             topElements,
             {
-              scale: 1.12,
-              y: -50,
+              scale: 1.1,
+              y: -45,
               opacity: 0,
-              filter: "blur(6px)",
+              filter: isMobile ? "blur(3px)" : "blur(6px)",
+              force3D: true,
               ease: "power2.inOut",
             },
             0
@@ -162,7 +165,8 @@ export const Hero: React.FC = () => {
             {
               y: 35,
               opacity: 0,
-              filter: "blur(4px)",
+              filter: isMobile ? "blur(2.5px)" : "blur(4px)",
+              force3D: true,
               ease: "power1.in",
             },
             0
@@ -174,9 +178,10 @@ export const Hero: React.FC = () => {
           tl.to(
             heroCenterpieceRef.current,
             {
-              scale: 0.9,
+              scale: 0.92,
               opacity: 0,
-              filter: "blur(6px)",
+              filter: isMobile ? "none" : "blur(6px)",
+              force3D: true,
               ease: "power2.in",
             },
             0
@@ -190,7 +195,8 @@ export const Hero: React.FC = () => {
             {
               y: 40,
               opacity: 0,
-              filter: "blur(6px)",
+              filter: isMobile ? "none" : "blur(6px)",
+              force3D: true,
               ease: "power2.in",
             },
             0
@@ -204,7 +210,8 @@ export const Hero: React.FC = () => {
             {
               y: 50,
               opacity: 0,
-              filter: "blur(6px)",
+              filter: isMobile ? "none" : "blur(6px)",
+              force3D: true,
               ease: "power2.in",
             },
             0
@@ -218,6 +225,7 @@ export const Hero: React.FC = () => {
             {
               y: 20,
               opacity: 0,
+              force3D: true,
               ease: "power1.in",
             },
             0
@@ -228,8 +236,8 @@ export const Hero: React.FC = () => {
         if (heroPortalFlashRef.current) {
           tl.fromTo(
             heroPortalFlashRef.current,
-            { opacity: 0, scale: 0.8 },
-            { opacity: 0.5, scale: 1.3, ease: "power2.out" },
+            { opacity: 0, scale: 0.85 },
+            { opacity: 0.5, scale: 1.25, force3D: true, ease: "power2.out" },
             0.35
           );
         }
@@ -260,10 +268,14 @@ export const Hero: React.FC = () => {
       aria-label="Hero Overview"
       className="relative overflow-clip min-h-[96vh] flex flex-col justify-between pt-8 pb-10 sm:pt-14 sm:pb-14 lg:pt-20 lg:pb-16"
     >
-      {/* Dimensional Portal Energy Flash for Scroll Transition */}
+      {/* Dimensional Portal Energy Flash for Scroll Transition (Hardware-Accelerated Radial Gradient) */}
       <div
         ref={heroPortalFlashRef}
-        className="pointer-events-none fixed inset-0 z-20 opacity-0 bg-radial from-cyan-400/25 via-indigo-600/15 to-transparent blur-3xl"
+        className="pointer-events-none fixed inset-0 z-20 opacity-0 will-change-transform"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.28) 0%, rgba(99, 102, 241, 0.16) 45%, transparent 70%)",
+        }}
         aria-hidden="true"
       />
 
@@ -309,7 +321,7 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Cinematic Statement & Subtitle */}
-            <div ref={heroSubtitleRef} className="space-y-4">
+            <div ref={heroSubtitleRef} className="space-y-4 will-change-transform">
               <div className="text-mask-reveal mt-2">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-[1.2]">
                   <span className="shimmer-headline font-black">
@@ -326,7 +338,7 @@ export const Hero: React.FC = () => {
             {/* Primary Action Buttons with Magnetic Elasticity */}
             <div
               ref={heroButtonsRef}
-              className="mt-8 flex flex-wrap items-center gap-4 w-full sm:w-auto"
+              className="mt-8 flex flex-wrap items-center gap-4 w-full sm:w-auto will-change-transform"
             >
               <div ref={magneticButtonRef} className="w-full sm:w-auto">
                 <Button

@@ -288,12 +288,32 @@ export const HologramSphere3D: React.FC = () => {
         }
       }
 
-      animId = requestAnimationFrame(render);
+      if (isVisible) {
+        animId = requestAnimationFrame(render);
+      } else {
+        animId = null;
+      }
     };
+
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && animId === null) {
+          animId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
     animId = requestAnimationFrame(render);
 
     return () => {
+      observer.disconnect();
       if (animId !== null) cancelAnimationFrame(animId);
       window.removeEventListener("resize", onResize);
     };
