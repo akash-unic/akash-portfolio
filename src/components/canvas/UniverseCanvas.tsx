@@ -51,7 +51,7 @@ export const UniverseCanvas: React.FC = () => {
       depth: true,
     });
 
-    const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
     renderer.setPixelRatio(dpr);
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -66,7 +66,7 @@ export const UniverseCanvas: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     // 3. Volumetric Stardust & Cosmic Particle Universe
-    const particleCount = isMobile ? 500 : 1200;
+    const particleCount = isMobile ? 700 : 1200;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -123,13 +123,13 @@ export const UniverseCanvas: React.FC = () => {
     const particleTexture = createParticleTexture();
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: isMobile ? 1.4 : 1.9,
+      size: isMobile ? 1.7 : 1.9,
       map: particleTexture,
       vertexColors: true,
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      opacity: isMobile ? 0.25 : 0.38,
+      opacity: isMobile ? 0.35 : 0.38,
     });
 
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);

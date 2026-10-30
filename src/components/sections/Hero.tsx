@@ -114,13 +114,15 @@ export const Hero: React.FC = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize",
+    });
+
     const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
-
-    // Only apply pinning on desktop with fine pointer and no reduced-motion preference
-    if (!isReducedMotion && isFinePointer && isDesktop && heroStageRef.current && heroTitleRef.current) {
+    // Apply cinematic dissolve transformation across all devices (desktop & mobile touchscreens)
+    if (!isReducedMotion && heroStageRef.current && heroTitleRef.current) {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -128,6 +130,7 @@ export const Hero: React.FC = () => {
             start: "top top",
             end: "+=80%",
             pin: true,
+            pinSpacing: true,
             scrub: 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -236,8 +239,14 @@ export const Hero: React.FC = () => {
         ScrollTrigger.refresh();
       }, 400);
 
+      const handleOrientation = () => {
+        ScrollTrigger.refresh();
+      };
+      window.addEventListener("orientationchange", handleOrientation, { passive: true });
+
       return () => {
         clearTimeout(refreshTimer);
+        window.removeEventListener("orientationchange", handleOrientation);
         ctx.revert();
         ScrollTrigger.refresh();
       };
@@ -254,7 +263,7 @@ export const Hero: React.FC = () => {
       {/* Dimensional Portal Energy Flash for Scroll Transition */}
       <div
         ref={heroPortalFlashRef}
-        className="pointer-events-none fixed inset-0 z-20 opacity-0 bg-radial from-cyan-400/25 via-indigo-600/15 to-transparent blur-3xl transition-opacity"
+        className="pointer-events-none fixed inset-0 z-20 opacity-0 bg-radial from-cyan-400/25 via-indigo-600/15 to-transparent blur-3xl"
         aria-hidden="true"
       />
 
